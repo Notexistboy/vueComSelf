@@ -8,7 +8,7 @@
 import echarts from "echarts";
 export default {
   props: {
-    objData:Object
+    curveData:Object
 	},
   data() {
     return {
@@ -18,8 +18,8 @@ export default {
     };
   },
   mounted() {
-    this.getlegendData;
-    const { objData,legendData,xAxisDatas,seriesData } = this;
+    this.getData;
+    const { legendData,xAxisDatas,seriesData } = this;
     let xAxisData = [ ...new Set( xAxisDatas ) ];
     var myChart = echarts.init(document.getElementById("curveChartContainer"));
     myChart.setOption({
@@ -46,20 +46,19 @@ export default {
   },
   methods: {},
   computed: {
-    getlegendData(){
+    getData(){
       var color = ['#08c','#fa5','#c03', '#609','#703','#0fc'];
-      const { objData,legendData,seriesData,xAxisDatas } = this;
+      const { curveData,legendData,seriesData,xAxisDatas } = this;
       //判断传入数据是几个
       //循环遍历数据
       let values= [];
-      for(var key in objData){
+      for(var key in curveData){
         legendData.push(key);    
-        values.push(objData[key]);//取得value
-        for(var item in objData[key]){
+        values.push(curveData[key]);//取得value
+        for(var item in curveData[key]){
           xAxisDatas.push(item)
         }
       };
-      
       //遍历value中的数据
       var obj={}
       for(var i=0; i<values.length; i++){
@@ -67,7 +66,6 @@ export default {
         for(var item in values[i]){
           obj["data_"+i].push(values[i][item])
         }
-        debugger
         if(values.length<2){
           seriesData.push({
             name: legendData[i],
@@ -106,7 +104,6 @@ export default {
           })
         }
       };
-      console.log(seriesData)
       return {legendData,xAxisDatas,seriesData};
     }
   }

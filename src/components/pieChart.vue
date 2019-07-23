@@ -8,18 +8,21 @@
 import echarts from "echarts";
 export default {
 	props: {
-
+    pieData: Object
 	},
   data() {
-    return {};
+    return {
+      legendData:[],
+      listData: [],
+      seriesData: [],
+      arrayData:[]
+    };
   },
   mounted() {
+    this.getData
+    const { legendData,arrayData,listData } = this
     var myChart = echarts.init(document.getElementById("pieChartContainer"));
-
     myChart.setOption({
-			color: ['#08c','#fa5','#c03', '#609','#703','#0fc'],
-      animation: false, //动画
-      hoverAnimation: false, //移入移出动画
       title: { 
         text: "某站点用户访问来源",
       },
@@ -30,7 +33,7 @@ export default {
       legend: {
 				orient: "horizontal",
 				top:"10%",
-        data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+        data: legendData
 			},
       grid: {
         top: "20%",    //距离容器上边界40像素
@@ -41,33 +44,55 @@ export default {
           type: "pie",
           radius: "60%",
           center: ["50%", "50%"],
-          data: [
-            { value: 335, name: "直接访问" },
-            { value: 310, name: "邮件营销" },
-            { value: 234, name: "联盟广告" },
-            { value: 135, name: "视频广告" },
-            { value: 1548, name: "搜索引擎" }
-          ],
           itemStyle: {
-						 normal: {
-              barBorderRadius: 3, // 柱条边线圆角，单位px，默认为0
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: "#FFF" },
-                { offset: 0.5, color: "#00b0f3" },
-                { offset: 1, color: "#00caf9" }
-              ])
-            },
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)"
+            normal: {
+                label: {
+                    show: false
+                },
+                labelLine: {
+                    show: false
+                }
             }
-          }
+          },
+          hoverAnimation: false, 
+          data: listData,
         }
       ]
     });
   },
-  methods: {}
+  methods: {},
+  computed: {
+    getData(){
+      const { pieData,legendData,arrayData,listData } = this
+      for (var key in pieData){
+        legendData.push(key)
+        arrayData.push(pieData[key])
+      }
+      var color= ['#08c','#fa5','#c03', '#609','#703','#0fc']
+      //datalist遍历
+      for(var i=0; i<legendData.length; i++){
+        listData.push({
+          value: arrayData[i], name: legendData[i],
+          itemStyle: {
+                normal: {
+                    color: { // 完成的圆环的颜色
+                        colorStops: [{offset: 0,color: '#fff' // 0% 处的颜色
+                        }, {offset: 1,color: color[i] // 100% 处的颜色
+                        }]
+                    },
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
+                    }
+                } 
+            }
+        })
+      }
+      return{ legendData,arrayData,listData }
+    }
+  },
 };
 </script>
 

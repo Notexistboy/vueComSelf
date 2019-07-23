@@ -8,15 +8,20 @@
 import echarts from "echarts";
 export default {
   props: {
-
+    annularData: Object
 	},
   data() {
-    return {};
+    return {
+      legendData:[],
+      listData: [],
+      seriesData: [],
+      arrayData:[]
+    };
   },
   mounted() {
-    var myChart = echarts.init(
-      document.getElementById("annularChartContainer")
-    );
+    this.getData
+    const { legendData,arrayData,listData } = this
+    var myChart = echarts.init(document.getElementById("annularChartContainer"));
     myChart.setOption({
 			color: ['#08c','#fa5','#c03', '#609','#703','#0fc'],
       title: {
@@ -31,7 +36,7 @@ export default {
       legend: {
 				orient: "horizontal",
 				top:"10%",
-        data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+        data: legendData
 			},
       grid : {
         top : "20%",    //距离容器上边界40像素
@@ -60,18 +65,55 @@ export default {
               show: false
             }
           },
-          data: [
-            { value: 335, name: "直接访问" },
-            { value: 310, name: "邮件营销" },
-            { value: 234, name: "联盟广告" },
-            { value: 135, name: "视频广告" },
-            { value: 1548, name: "搜索引擎" }
-          ]
+          itemStyle: {
+            normal: {
+                label: {
+                    show: false
+                },
+                labelLine: {
+                    show: false
+                }
+            }
+          },
+          hoverAnimation: false, 
+          data: listData,
         }
       ]
     });
   },
-  methods: {}
+  methods: {},
+  computed: {
+    getData(){
+      const { annularData,legendData,arrayData,listData } = this
+      for (var key in annularData){
+        legendData.push(key)
+        arrayData.push(annularData[key])
+      }
+      var color= ['#08c','#fa5','#c03', '#609','#703','#0fc']
+      //datalist遍历
+      for(var i=0; i<legendData.length; i++){
+        listData.push({
+          value: arrayData[i], name: legendData[i],
+          itemStyle: {
+                normal: {
+                    color: { // 完成的圆环的颜色
+                        colorStops: [{offset: 0,color: '#fff' // 0% 处的颜色
+                        }, {offset: 1,color: color[i] // 100% 处的颜色
+                        }]
+                    },
+                    label: {
+                        show: false
+                    },
+                    labelLine: {
+                        show: false
+                    }
+                } 
+            }
+        })
+      }
+      return{ legendData,arrayData,listData }
+    }
+  },
 };
 </script>
 
