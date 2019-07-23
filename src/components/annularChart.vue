@@ -27,8 +27,6 @@ export default {
       title: {
         text: "某站点用户访问来源",
       },
-      animation: false, //动画
-      hoverAnimation: false, //移入移出动画
       tooltip: {
         trigger: "item",
         formatter: "{a} <br/>{b}: {c} ({d}%)"
