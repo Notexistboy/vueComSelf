@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="pieChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="pieChartContainer" style="width:500px; height:500px; z-index:1"></div>
   </div>
 </template>
 
@@ -22,7 +22,7 @@
     mounted() {
       this.getData
       const { title,legendData,arrayData,listData } = this
-      var myChart = echarts.init(document.getElementById("pieChartContainer"));
+      let myChart = echarts.init(this.$refs.pieChartContainer)
       myChart.setOption({
         title: { 
           text: title,
@@ -59,7 +59,7 @@
             data: listData,
           }
         ]
-      });
+      })
     },
     methods: {},
     computed: {

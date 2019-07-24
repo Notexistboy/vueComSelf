@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="curveChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="curveChartContainer" style="width:500px; height:500px; z-index:1"></div>
   </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
   mounted() {
     this.getData;
     const { title,legend,legendData,xAxisDatas,seriesData,yAxisData } = this;
-    let xAxisData = [ ...new Set( xAxisDatas ) ];
-    var myChart = echarts.init(document.getElementById("curveChartContainer"));
+    let xAxisData = [ ...new Set( xAxisDatas ) ]
+    let myChart = echarts.init(this.$refs.curveChartContainer)
     myChart.setOption({
       title: {
         text: title,
@@ -44,7 +44,7 @@ export default {
       },
       yAxis: yAxisData,
       series: seriesData,
-    });
+    })
   },
   methods: {},
   computed: {
@@ -90,7 +90,7 @@ export default {
             name: legendData[index],
             mix: Math.min.apply(null, obj["data_"+index]),
             max: Math.max.apply(null, obj["data_"+index]),
-            interval: Math.ceil(yMax/ 5),//刻度均匀分
+            interval: Math.ceil(Math.max.apply(null, obj["data_"+index])/ 5),//刻度均匀分
             axisLabel: {
               formatter: '{value}'
             },

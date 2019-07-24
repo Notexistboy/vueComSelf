@@ -1,7 +1,7 @@
 <template>
   <div style="position:relative; display:block">
-    <div id="barChartContainer" style="width:500px; height:500px; z-index:1" @click="change"></div>
-    <div id="barChartShadow" style="width:500px; height:500px; position:absolute;  top:0; left:0;"  @click="change"></div>
+    <div ref="barChartContainer" style="width:500px; height:500px; z-index:1" @click="change"></div>
+    <div ref="barChartShadow" style="width:500px; height:500px; position:absolute;  top:0; left:0;"  @click="change"></div>
   </div>
 </template>
 
@@ -29,8 +29,8 @@ export default {
     const { title,legend,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
     let xAxisData = [ ...new Set( xAxisDatas ) ]
     // 基于准备好的dom，初始化echarts实例
-    let myChart = echarts.init(document.getElementById("barChartContainer"))
-    let myShadow = echarts.init(document.getElementById("barChartShadow"))
+    let myChart = echarts.init(this.$refs.barChartContainer)
+    let myShadow = echarts.init(this.$refs.barChartShadow)
     let data = [10, 30, 50, 70, 90, 110, 130]
     
     //如何拿到最高点

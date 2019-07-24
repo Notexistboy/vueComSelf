@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="annularChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="annularChartContainer" style="width:500px; height:500px; z-index:1"></div>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   mounted() {
     this.getData
     const { title,legendData,arrayData,listData } = this
-    var myChart = echarts.init(document.getElementById("annularChartContainer"));
+    let myChart = echarts.init(this.$refs.annularChartContainer)
     myChart.setOption({
 			color: ['#08c','#fa5','#c03', '#609','#703','#0fc'],
       title: {
@@ -78,7 +78,7 @@ export default {
           data: listData,
         }
       ]
-    });
+    })
   },
   methods: {},
   computed: {

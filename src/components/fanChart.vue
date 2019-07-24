@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="fanChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="fanChartContainer" style="width:500px; height:500px; z-index:1"></div>
   </div>
 </template>
 
@@ -24,7 +24,7 @@
       this.percentNum
       this.getData
       const { title,legendData,titleData,seriesData } = this
-      var myChart = echarts.init(document.getElementById("fanChartContainer"));
+      let myChart = echarts.init(this.$refs.fanChartContainer)
       myChart.setOption({
         title:titleData,
         series: seriesData
