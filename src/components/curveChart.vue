@@ -11,6 +11,7 @@ export default {
     curveData: Object,
     descript: Boolean,
     title: String,
+    legend: String,
 	},
   data() {
     return {
@@ -22,7 +23,7 @@ export default {
   },
   mounted() {
     this.getData;
-    const { title,legendData,xAxisDatas,seriesData,yAxisData } = this;
+    const { title,legend,legendData,xAxisDatas,seriesData,yAxisData } = this;
     let xAxisData = [ ...new Set( xAxisDatas ) ];
     var myChart = echarts.init(document.getElementById("curveChartContainer"));
     myChart.setOption({
@@ -49,7 +50,7 @@ export default {
   computed: {
     getData(){
       var color = ['#08c','#fa5','#c03', '#609','#703','#0fc'];
-      const { curveData,descript,legendData,xAxisDatas,yAxisData,seriesData } = this;
+      const { curveData,legend,descript,legendData,xAxisDatas,yAxisData,seriesData } = this;
       //判断传入数据是几个
       //循环遍历数据
       let values= [];
@@ -73,24 +74,22 @@ export default {
         for(var it in values[index]){
           obj["data_"+index].push(values[index][it])
         }
-        //yMaxArr.push(Math.max.apply(null, obj["data_"+index]))
-        //yMinArr.push(Math.min.apply(null, obj["data_"+index]))
-        //yMax = Math.max.apply(null, yMaxArr)
-        //yMin = Math.min.apply(null, yMaxArr)
-        yMax =  Math.max.apply(null, obj["data_"+index])
-        yMin =  Math.min.apply(null, obj["data_"+index])
+        yMaxArr.push(Math.max.apply(null, obj["data_"+index]))
+        yMinArr.push(Math.min.apply(null, obj["data_"+index]))
+        yMax = Math.max.apply(null, yMaxArr)
+        yMin = Math.min.apply(null, yMaxArr)
         itemLength = obj["data_"+index].length
-        if(index==2){
-          offset = 80;
-          }else if(index>2){
-          offset = 80+(index*30);
-        }
         if(!descript){
+          if(index==2){
+            offset = 25;
+            }else if(index>2){
+            offset = 25+(index*25);
+          }
           yAxisData.push({
             type: 'value',
             name: legendData[index],
-            mix: yMax,
-            max: yMax,
+            mix: Math.min.apply(null, obj["data_"+index]),
+            max: Math.max.apply(null, obj["data_"+index]),
             interval: Math.ceil(yMax/ 5),//刻度均匀分
             axisLabel: {
               formatter: '{value}'
@@ -108,30 +107,29 @@ export default {
             name: legendData[index],
             data: obj["data_"+index],
             type: "line",
-            yAxisIndex: index,//多Y轴情况下显示右侧y轴刻度
             itemStyle : { 
-                normal : { 
-                  color:color[index], //改变折线点的颜色
-                  lineStyle:{ 
-                    color:color[index] //改变折线颜色
-                  },
-                }
-              },
-              areaStyle: {
-                normal: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 1, color: "#fff" },
-                    { offset: 0, color: color[index] }
-                  ])
-                }
-              },//控制阴影部分
+              normal : { 
+                color:color[index], //改变折线点的颜色
+                lineStyle:{ 
+                  color:color[index] //改变折线颜色
+                },
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 1, color: "#fff" },
+                  { offset: 0, color: color[index] }
+                ])
+              }
+            },//控制阴影部分
           })
           } else {
           seriesData.push({
             name: legendData[index],
             data: obj["data_"+index],
             type: "line",
-            yAxisIndex: index,//多Y轴情况下显示右侧y轴刻度
+            yAxisIndex: null,//多Y轴情况下显示右侧y轴刻度
             itemStyle : { 
               normal : { 
                 color:color[index], //改变折线点的颜色
@@ -144,86 +142,22 @@ export default {
         }
       })
       //Y轴遍历 是同类，只有1个y轴
-      if(descript){
+       if(descript){
         yAxisData.push({
           type: 'value',
-          name: legendData[index],
+          name: legend,
           mix: yMin,
           max: yMax,
           axisLabel: {
             formatter: '{value}'
           },
-          axisLine: {
-            lineStyle: {
-                color: color[index]
-            }
-          }
+        })
+      }else{
+        seriesData.forEach((item,index) => {
+          debugger
+          item['yAxisIndex']  = index //多Y轴情况下显示右侧y轴刻度
         })
       }
-      
-      /* for(var i=0; i<values.length; i++){
-        obj["data_"+i]=[]
-        for(var item in values[i]){
-          obj["data_"+i].push(values[i][item])
-        }
-        if(i==2){
-            offset = 80;
-          }else if(i>2){
-            offset = 80+(i*30);
-        }
-        yAxisData.push({
-          type: 'value',
-          name: legendData[i],
-          mix: 0,
-          max: 100,
-          axisLabel: {
-            formatter: '{value}'
-          },
-          axisLine: {
-            lineStyle: {
-                color: color[i]
-            }
-          },
-          offset:offset
-        })
-        if(values.length<2){
-          seriesData.push({
-            name: legendData[i],
-            data: obj["data_"+i],
-            type: "line",
-            itemStyle : { 
-                normal : { 
-                  color:color[i], //改变折线点的颜色
-                  lineStyle:{ 
-                    color:color[i] //改变折线颜色
-                  },
-                }
-              },
-              areaStyle: {
-                normal: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 1, color: "#fff" },
-                    { offset: 0, color: color[i] }
-                  ])
-                }
-              },//控制阴影部分
-          })
-          } else {
-          seriesData.push({
-            name: legendData[i],
-            data: obj["data_"+i],
-            type: "line",
-            itemStyle : { 
-              normal : { 
-                color:color[i], //改变折线点的颜色
-                lineStyle:{ 
-                  color:color[i] //改变折线颜色
-                },
-              }
-            },
-          })
-        }
-      }; */
       return {legendData,xAxisDatas,yAxisData,seriesData };
     }
   }

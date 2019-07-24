@@ -12,6 +12,7 @@ export default {
     barData:Object,
     descript: Boolean,
     title: String,
+    legend: String,
 	},
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
   },
   mounted() {
 		this.getData
-    const { title,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
+    const { title,legend,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
     let xAxisData = [ ...new Set( xAxisDatas ) ]
     // 基于准备好的dom，初始化echarts实例
     let myChart = echarts.init(document.getElementById("barChartContainer"))
@@ -111,7 +112,7 @@ export default {
 	computed:{
 		getData(){
 			let color = ['#08c','#fa5','#c03', '#609','#703','#0fc']
-      const { barData,descript,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
+      const { barData,descript,legend,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
       
 			let values= []
       for(let key in barData){
@@ -141,15 +142,17 @@ export default {
         //ymax = obj["data_"+index].Math(...obj["data_"+index])
         //Ymax 值可能不同 单位不同 无法公用一个
         yMaxArr.push(Math.max.apply(null, obj["data_"+index]))
+        yMinArr.push(Math.min.apply(null, obj["data_"+index]))
         yMax = Math.max.apply(null, yMaxArr)
+        yMin = Math.min.apply(null, yMaxArr)
         itemLength = obj["data_"+index].length
         debugger
-        if(index==2){
-          offset = 80;
-          }else if(index>2){
-          offset = 80+(index*30);
-        }
         if(!descript){
+          if(index==2){
+            offset = 25;
+            }else if(index>2){
+            offset = 25+(index*25);
+          }
           yAxisData.push({
             type: 'value',
             name: legendData[index],
@@ -173,7 +176,6 @@ export default {
           type: "bar",
           barWidth: "20%",
           data: obj["data_"+index],
-          yAxisIndex: index,//多Y轴情况下显示右侧y轴刻度
           itemStyle: {
             normal: {
               barBorderRadius: 3, // 柱条边线圆角，单位px，默认为0
@@ -196,17 +198,17 @@ export default {
       if(descript){
         yAxisData.push({
           type: 'value',
-          name: legendData[index],
+          name: legend,
           mix: yMin,
           max: yMax,
           axisLabel: {
             formatter: '{value}'
           },
-          axisLine: {
-            lineStyle: {
-                color: color[index]
-            }
-          }
+        })
+      }else{
+        seriesData.forEach((item,index) => {
+          debugger
+          item['yAxisIndex']  = index
         })
       }
       //阴影部分
@@ -233,80 +235,6 @@ export default {
         })
       }
       console.log(yAxisData)
-      /* for(let i=0; i<values.length; i++){
-        debugger
-        obj["data_"+index]=[]
-        for(let item in values[index]){
-          obj["data_"+index].push(values[index][item])
-        }
-        //obj["data_"+index].length
-        //ymax = obj["data_"+index].Math(...obj["data_"+index])
-        let yMax = Math.max.apply(null, obj["data_"+index])
-        debugger
-        const itemLength = obj["data_"+index].length
-        if(dataShadow.length < itemLength){
-          //i不能混用 下面还要用i
-          for (let j = 0; j < itemLength; j++) {
-            dataShadow.push(yMax)
-          }
-        }
-        debugger
-        if(i==2){
-          offset = 80;
-          }else if(i>2){
-          offset = 80+(i*30);
-        }
-        yAxisData.push({
-          type: 'value',
-          name: legendData[index],
-          mix: 0,
-          max: 100,
-          axisLabel: {
-            formatter: '{value}'
-          },
-          axisLine: {
-            lineStyle: {
-                color: color[index]
-            }
-          },
-          offset:offset
-        })
-        debugger
-        seriesData.push({
-          itemStyle: {
-            normal: {
-              barBorderRadius: 3, // 柱条边线圆角，单位px，默认为0
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: color[index] },
-                { offset: 1, color: "#fff" }
-              ])
-            },
-            emphasis: {
-              barBorderRadius: 3,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: color[index] },
-                { offset: 1, color: "#fff" }
-              ])
-            },
-          },
-          name: legendData[index],
-          type: "bar",
-          barWidth: "20%",
-          data: obj["data_"+index],
-        })
-        seriesDataShadow.push({
-          // For shadow
-          type: "bar",
-          itemStyle: {
-            normal: { color: "rgba(0,0,0,0.05)" }
-          },
-          name: legendData[index],
-          barWidth: "20%",
-          barCategoryGap: "-150%",
-          data: dataShadow, //会显示出来
-          animation: false,
-        })
-      } */
 			return {legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow }
 		}
 	}
