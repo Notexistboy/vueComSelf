@@ -8,7 +8,8 @@
 import echarts from "echarts";
 export default {
   props: {
-    annularData: Object
+    annularData: Object,
+    title: String,
 	},
   data() {
     return {
@@ -20,12 +21,12 @@ export default {
   },
   mounted() {
     this.getData
-    const { legendData,arrayData,listData } = this
+    const { title,legendData,arrayData,listData } = this
     var myChart = echarts.init(document.getElementById("annularChartContainer"));
     myChart.setOption({
 			color: ['#08c','#fa5','#c03', '#609','#703','#0fc'],
       title: {
-        text: "某站点用户访问来源",
+        text: title,
       },
       tooltip: {
         trigger: "item",

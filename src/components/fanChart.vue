@@ -8,7 +8,8 @@
   import echarts from "echarts";
   export default {
     props: {
-      fanData:Array
+      fanData: Array,
+      title: String,
     },
     data () {
       return {
@@ -22,7 +23,7 @@
     mounted(){
       this.percentNum
       this.getData
-      const { legendData,titleData,seriesData } = this
+      const { title,legendData,titleData,seriesData } = this
       var myChart = echarts.init(document.getElementById("fanChartContainer"));
       myChart.setOption({
         title:titleData,

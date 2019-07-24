@@ -8,7 +8,8 @@
   import echarts from "echarts";
   export default {
     props: {
-      pieData: Object
+      pieData: Object,
+      title: String,
     },
     data() {
       return {
@@ -20,11 +21,11 @@
     },
     mounted() {
       this.getData
-      const { legendData,arrayData,listData } = this
+      const { title,legendData,arrayData,listData } = this
       var myChart = echarts.init(document.getElementById("pieChartContainer"));
       myChart.setOption({
         title: { 
-          text: "某站点用户访问来源",
+          text: title,
         },
         tooltip: {
           trigger: "item",
