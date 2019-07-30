@@ -5,7 +5,6 @@
     <barChart :barData="objData1" :descript="descript1" :title="title" :legend="legend"/>
     <curveChart :curveData="objData1" :descript="descript1" :title="title" :legend="legend"/>
     <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend"/>
-    
     <pieChart :pieData="obj1Data" :title="title" />
     <fanChart :fanData="data" :title="title" />
   </div>
