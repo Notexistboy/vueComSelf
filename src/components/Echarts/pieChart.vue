@@ -1,3 +1,8 @@
+<!--
+* Echarts-Pie
+* Seong Han
+* 2019.07.26
+-->
 <template>
   <div>
     <div ref="pieChartContainer" style="width:500px; height:500px; z-index:1"></div>
@@ -8,8 +13,8 @@
   import echarts from "echarts";
   export default {
     props: {
-      pieData: Object,
-      title: String,
+      pieData: Object,//数据
+      title: String,//标题
     },
     data() {
       return {

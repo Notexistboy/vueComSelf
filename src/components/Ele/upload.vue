@@ -1,3 +1,8 @@
+<!--
+* Element-UI-Upload
+* Seong Han
+* 2019.07.30
+-->
 <template>
   <div>
   <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
@@ -7,14 +12,14 @@
       <el-col :span="22">
         <el-upload
             class="upload-demo"
-            :action="action"
+            action="action"
             :header="headers"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :on-success="handeleSuccess"	
             :before-upload="beforeUpload"
             :before-remove="beforeRemove"
-            :accept="acceptFileType"
+            :accept=acceptFileType
             multiple
             :limit="limitNum"
             :on-exceed="handleExceed"
@@ -36,10 +41,11 @@
   import axios from 'axios'
   export default {
     props:{
-      acceptFileType: Array,//指定文件类型
+      acceptFileType: String,//指定文件类型
       limitNum: Number,//限制文件个数
       limitSize: String,//限制文件大小
       action: String,//上传地址
+      acceptApi:String,//接口地址
     },
     data() {
       return {
@@ -58,7 +64,6 @@
         this.uploadTemplateDialog=true;
         setTimeout(function(){
             //清空已上传的文件列表
-            debugger
             //this.$refs.upload.clearFiles();
         },100);
       },
@@ -91,7 +96,7 @@
       },
       //文件超出个数限制时的钩子
       handleExceed(files, fileList) {
-        this.$message.warning(`当前限制选择${limitNum}个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+        this.$message.warning(`当前限制选择${this.limitNum}个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
       handeleSuccess(files, fileList) {
         
@@ -102,28 +107,33 @@
       },
       //上传文件之前的钩子，参数为上传的文件
       beforeUpload(file){
-        const limitSize = this.limitSize.split('M')[0]
+        const { acceptFileType,acceptApi } = this
+        debugger
+        //判断大小,取出页面传递指定大小
+        let limitSize = this.limitSize.split('M')[0]
+        //取出页面指定文件类型
+        let acceptFile = acceptFileType.split(",")
         debugger
         //var this=this;
         //判断文件类型
-        var fileName=file.name.substring(file.name.lastIndexOf('.')+1);
+        let fileName=file.name.substring(file.name.lastIndexOf('.')+1);
         //判断文件类型是否相符
-        debugger
-        if(fileName!='xls'){
-          this.uploadTemplateDialog=false;
-          this.$message({
-            type:'error',
-            showClose:true,
-            duration:3000,
-            message:`文件类型不是${this.acceptFileType}文件!`
-          });
+        acceptFile.map(item => {
+          if(fileName!=item){
+            this.uploadTemplateDialog=false;
+            this.$message({
+              type:'error',
+              showClose:true,
+              duration:3000,
+              message:`文件类型不是${item}文件!`
+            });
           return false;
-        }
+          }
+        })
         //读取文件大小
-        var fileSize=file.size;
-        debugger
-        console.log(fileSize);
-        if(fileSize>limitSize){
+        let fileSize=file.size;
+        limitSize = parseFloat(limitSize)*1024*1024
+        if( fileSize > limitSize ){
           this.uploadTemplateDialog=false;
           this.$message({
             type:'error',
@@ -133,6 +143,7 @@
           });
           return false;
         }
+
         this.downloadLoading=this.$loading({
           lock:true,
           text:'数据导入中...',
@@ -145,10 +156,10 @@
         debugger
         axios({
           method:'post',//请求类型
-          url:'/upload/'+new Date().getTime(),//请求地址
+          url:acceptApi+new Date().getTime(),//请求地址,端口号
           data:fd, //request body
           headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}//自定义请求头
-        }).then(rsp=>{
+        }).then(rsp=>{//请求成功，发送成功
             this.downloadLoading.close();
             this.uploadLoading=false;
             let resp=rsp.data
@@ -156,7 +167,7 @@
               this.uploadTemplateDialog=false;
               this.$message.success(resp.resultMsg);
               //this.queryData();//更新数据
-            }else{
+            }else{//发送失败
               this.uploadTemplateDialog=false;
               this.$message({
                 type:'error',
@@ -165,7 +176,8 @@
                 message:resp.resultMsg
               });
             }
-          }).catch(error=> {
+            
+          }).catch(error=> {//请求失败
             this.downloadLoading.close();
             this.uploadLoading=false;
             this.uploadTemplateDialog=false;
@@ -176,7 +188,7 @@
               message:'请求失败! error:'+error
             });
           })
-        return false;
+        return false;//屏蔽 action
       }
     },
     computed: {

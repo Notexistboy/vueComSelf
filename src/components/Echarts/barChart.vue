@@ -1,3 +1,8 @@
+<!--
+* Echarts-Bar
+* Seong Han
+* 2019.07.23
+-->
 <template>
   <div style="position:relative; display:block">
     <div ref="barChartContainer" style="width:500px; height:500px; z-index:1" @click="change"></div>
@@ -9,10 +14,10 @@
 import echarts from "echarts";
 export default {
 	props: {
-    barData:Object,
-    descript: Boolean,
-    title: String,
-    legend: String,
+    barData:Object,//数据
+    descript: Boolean,//是否共用一个坐标轴
+    title: String,//标题
+    legend: String,//横坐标
 	},
   data() {
     return {

@@ -1,3 +1,8 @@
+<!--
+* Echarts-Annular
+* Seong Han
+* 2019.07.22
+-->
 <template>
   <div>
     <div ref="annularChartContainer" style="width:500px; height:500px; z-index:1"></div>
@@ -8,8 +13,8 @@
 import echarts from "echarts";
 export default {
   props: {
-    annularData: Object,
-    title: String,
+    annularData: Object,//数据
+    title: String,//标题
 	},
   data() {
     return {

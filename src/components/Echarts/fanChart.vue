@@ -1,3 +1,8 @@
+<!--
+* Echarts-Fan
+* Seong Han
+* 2019.07.25
+-->
 <template>
   <div>
     <div ref="fanChartContainer" style="width:500px; height:500px; z-index:1"></div>
@@ -8,8 +13,8 @@
   import echarts from "echarts";
   export default {
     props: {
-      fanData: Array,
-      title: String,
+      fanData: Array,//数据
+      title: String,//标题
     },
     data () {
       return {

@@ -1,3 +1,8 @@
+<!--
+* Echarts-Curve
+* Seong Han
+* 2019.07.24
+-->
 <template>
   <div>
     <div ref="curveChartContainer" style="width:500px; height:500px; z-index:1"></div>
@@ -8,10 +13,11 @@
 import echarts from "echarts";
 export default {
   props: {
-    curveData: Object,
-    descript: Boolean,
-    title: String,
-    legend: String,
+    curveData: Object,//数据点
+    descript: Boolean,//是否共用一个纵坐标
+    title: String,//标题文字
+    legend: String,//横坐标文字
+    smooth: Boolean,//是否平滑
 	},
   data() {
     return {
@@ -107,6 +113,7 @@ export default {
             name: legendData[index],
             data: obj["data_"+index],
             type: "line",
+            smooth: this.smooth,
             itemStyle : { 
               normal : { 
                 color:color[index], //改变折线点的颜色
@@ -129,6 +136,7 @@ export default {
             name: legendData[index],
             data: obj["data_"+index],
             type: "line",
+            smooth: this.smooth,
             yAxisIndex: null,//多Y轴情况下显示右侧y轴刻度
             itemStyle : { 
               normal : { 
