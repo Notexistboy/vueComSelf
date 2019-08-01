@@ -41,10 +41,9 @@
   import axios from 'axios'
   export default {
     props:{
-      acceptFileType: String,//指定文件类型
+      acceptFileType: String,//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
       limitNum: Number,//限制文件个数
-      limitSize: String,//限制文件大小
-      action: String,//上传地址
+      limitSize: String,//限制文件大小,最小为1M，并以M为单位
       acceptApi:String,//接口地址
     },
     data() {
@@ -143,17 +142,17 @@
           });
           return false;
         }
-
         this.downloadLoading=this.$loading({
           lock:true,
           text:'数据导入中...',
           spinner:'el-icon-loading',
           background:'rgba(0,0,0,0.7)'
-        });
-        let fd = new FormData();
-        fd.append('file',file);
-        fd.append('_t1',new Date());
+        })
+        let fd = new FormData()
+        fd.append('file',file)
+        fd.append('_t1',new Date())
         debugger
+        console.log(fd)
         axios({
           method:'post',//请求类型
           url:acceptApi+new Date().getTime(),//请求地址,端口号
@@ -172,7 +171,7 @@
               this.$message({
                 type:'error',
                 showClose:true,
-                duration:60000,
+                duration:3000,
                 message:resp.resultMsg
               });
             }
@@ -184,9 +183,9 @@
             this.$message({
               type:'error',
               showClose:true,
-              duration:60000,
+              duration:3000,
               message:'请求失败! error:'+error
-            });
+            })
           })
         return false;//屏蔽 action
       }
