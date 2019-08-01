@@ -5,9 +5,7 @@
 -->
 <template>
   <div>
-  <el-button type="primary" size="mini" @click="uploadFile">导入</el-button>
   <!--上传-->
-  <el-dialog title="上传" width="40%" :visible.sync="uploadTemplateDialog">
     <el-row>
       <el-col :span="22">
         <el-upload
@@ -27,13 +25,13 @@
             <el-button size="small" type="primary" >点击上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传{{acceptFileType}}文件，大小不超过{{limitSize}}</div>
         </el-upload>
+
       </el-col>
     </el-row>
-    <span slot="footer" class="dialog-footer">
+    <!-- <span slot="footer" class="dialog-footer">
         <el-button @click="submitUpload" type="primary" size="mini" :loading="uploadLoading">确定上传</el-button>
         <el-button @click="uploadTemplateDialog=false" size="mini">取消</el-button>
-    </span>
-</el-dialog>
+    </span> -->
   </div>
 </template>
 
@@ -50,14 +48,12 @@
       return {
         fileList: [],//存放文件列表[{name: '', url: ''}]
         uploadTemplateDialog:false,
-        uploadLoading:false,
         downLoadLoading:'',
       };
     },
     methods: {
       //打开上传模态框 ok
-      uploadFile(){
-        this.uploadLoading=false;
+      /* uploadFile(){
         //var that = this
         this.fileList=[];
         this.uploadTemplateDialog=true;
@@ -65,17 +61,16 @@
             //清空已上传的文件列表
             //this.$refs.upload.clearFiles();
         },100);
-      },
+      }, */
       //确认上传 按钮
-      submitUpload(){
+      /* submitUpload(){
         this.uploadLoading=true;
         //var that = this
         setTimeout(function () {
           if(this.$refs.upload.$children[0].fileList.length==1){
             debugger
             this.$refs.upload.submit();//手动触发提交上传
-          }else{
-            this.uploadLoading=false;
+          }else{           
             this.$message({
               type:'error',
               showClose:true,
@@ -84,7 +79,7 @@
             });
           };
         },100);
-      },
+      }, */
       //文件列表移除文件时的钩子
       handleRemove(file, fileList) {
         console.log(file, fileList);
@@ -97,6 +92,7 @@
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择${this.limitNum}个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
       },
+      //文件上传成功
       handeleSuccess(files, fileList) {
         
       },
@@ -107,18 +103,16 @@
       //上传文件之前的钩子，参数为上传的文件
       beforeUpload(file){
         const { acceptFileType,acceptApi } = this
-        debugger
         //判断大小,取出页面传递指定大小
         let limitSize = this.limitSize.split('M')[0]
         //取出页面指定文件类型
         let acceptFile = acceptFileType.split(",")
-        debugger
-        //var this=this;
         //判断文件类型
         let fileName=file.name.substring(file.name.lastIndexOf('.')+1);
         //判断文件类型是否相符
-        acceptFile.map(item => {
-          if(fileName!=item){
+        acceptFile.map(item => { 
+          if(fileName != item){
+            debugger
             this.uploadTemplateDialog=false;
             this.$message({
               type:'error',
@@ -126,13 +120,14 @@
               duration:3000,
               message:`文件类型不是${item}文件!`
             });
-          return false;
+          return ;
           }
         })
         //读取文件大小
         let fileSize=file.size;
         limitSize = parseFloat(limitSize)*1024*1024
         if( fileSize > limitSize ){
+          debugger
           this.uploadTemplateDialog=false;
           this.$message({
             type:'error',
@@ -140,27 +135,28 @@
             duration:3000,
             message:`文件大于${this.limitSize}!`
           });
-          return false;
+          return ;
         }
+
         this.downloadLoading=this.$loading({
           lock:true,
           text:'数据导入中...',
           spinner:'el-icon-loading',
           background:'rgba(0,0,0,0.7)'
         })
-        let fd = new FormData()
+        let fd = new FormData()// 将数据包装成form
         fd.append('file',file)
         fd.append('_t1',new Date())
         debugger
         console.log(fd)
+        debugger
         axios({
-          method:'post',//请求类型
-          url:acceptApi+new Date().getTime(),//请求地址,端口号
-          data:fd, //request body
-          headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}//自定义请求头
-        }).then(rsp=>{//请求成功，发送成功
+            method:'post',//请求类型
+            url:acceptApi+new Date().getTime(),//请求地址,端口号
+            data:fd, //request body
+            headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}//自定义请求头
+          }).then( rsp => {//请求成功，发送成功
             this.downloadLoading.close();
-            this.uploadLoading=false;
             let resp=rsp.data
             if(resp.resultCode==200){
               this.uploadTemplateDialog=false;
@@ -173,12 +169,12 @@
                 showClose:true,
                 duration:3000,
                 message:resp.resultMsg
-              });
+              })
             }
-            
-          }).catch(error=> {//请求失败
+            this.$refs.upload.submit();
+          }).catch( error => {//请求失败
+          this.$refs.upload.clearFiles();
             this.downloadLoading.close();
-            this.uploadLoading=false;
             this.uploadTemplateDialog=false;
             this.$message({
               type:'error',
@@ -186,7 +182,7 @@
               duration:3000,
               message:'请求失败! error:'+error
             })
-          })
+        })
         return false;//屏蔽 action
       }
     },
@@ -206,6 +202,28 @@
   }
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
-
+<style rel='stylesheet/stylus'>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

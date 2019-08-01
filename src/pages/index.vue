@@ -1,7 +1,7 @@
 <template>
   <div>
-    <!-- <upload :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize" :acceptApi="acceptApi"/> -->
-    <uploader :maxCount="maxCount" :accept="accept" :acceptApi="acceptApi" :maxSize="maxSize" :multiple="multiple" :preview="preview" :request="request"/>
+    <upload :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize" :acceptApi="acceptApi"/>
+    <!-- <uploader :maxCount="maxCount" :accept="accept" :acceptApi="acceptApi" :maxSize="maxSize" :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize"/> -->
   </div>
 </template>
 
@@ -11,7 +11,7 @@
     data () {
       return {
         //Element-UI
-        acceptFileType: "png",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
+        acceptFileType: "ico,png",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
         limitNum: 5, //限制文件个数，数值型
         limitSize: '5M',//限制文件大小,最小为1M，并以M为单位
         acceptApi: '/api/uploader/',//接口地址
@@ -23,6 +23,7 @@
         multiple:true,//多图上传，部分安卓不支持
         request:false,//是否在提交时立即发送请求
         preview:true,//是否是显示缩略图的形式
+        previewSize:80,	//预览图和上传区域的尺寸，默认单位为px
       }
     },
     methods: {},

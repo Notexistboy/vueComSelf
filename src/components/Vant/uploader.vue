@@ -5,15 +5,18 @@
 -->
 <template>
   <div>
-    <van-uploader
-      v-if=preview
-      :after-read="afterRead"
-      :before-read="beforeRead"
-      v-model="fileList"
-      :max-count="maxCount"
-      :max-size="maxSize*1024*1024"
-      :multiple=multiple
-    />
+    <div v-if=preview>
+      <van-uploader
+        :after-read="afterRead"
+        :before-read="beforeRead"
+        v-model="fileList"
+        :max-count="maxCount"
+        :max-size="maxSize*1024*1024"
+        :multiple=multiple
+        :preview-size="previewSize"
+      />
+      <p></p>
+    </div>
     <div v-else>
       <van-uploader
         :accept="accept"
@@ -46,6 +49,7 @@ export default {
     multiple: Boolean,//多图上传，部分安卓不支持
     request: Boolean,//是否在提交时立即发送请求
     preview: Boolean,//是否是显示缩略图的形式
+    previewSize: String,
   },
   data() {
     return {
