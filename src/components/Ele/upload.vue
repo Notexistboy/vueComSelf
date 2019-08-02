@@ -8,24 +8,68 @@
   <!--上传-->
     <el-row>
       <el-col :span="22">
-        <el-upload
+        <div v-if="preview"><!-- :header="headers" -->
+          <el-upload
             class="upload-demo"
-            action="action"
-            :header="headers"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
+            action="https://jsonplaceholder.typicode.com/posts/"
             :on-success="handeleSuccess"	
+            :on-error="handeleError"
             :before-upload="beforeUpload"
             :before-remove="beforeRemove"
+            :on-remove="handleRemove"
             :accept=acceptFileType
+            :show-file-list=showLileList
             multiple
             :limit="limitNum"
             :on-exceed="handleExceed"
-            :file-list="fileList">
-            <el-button size="small" type="primary" >点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传{{acceptFileType}}文件，大小不超过{{limitSize}}</div>
-        </el-upload>
-
+            :file-list="fileList"
+            list-type="picture-card"
+          >
+            <i slot="default" class="el-icon-plus"></i>
+            <div slot="file" slot-scope="{file}">
+              <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" >
+              <span class="el-upload-list__item-actions">
+                <span 
+                  class="el-upload-list__item-preview" 
+                  @click="handlePreview(file)"
+                >
+                  <i class="el-icon-zoom-in"></i>
+                </span>
+                <span
+                  v-if="!disabled"
+                  class="el-upload-list__item-delete"
+                  @click="handleRemove(files)"
+                >
+                  <i class="el-icon-delete"></i>
+                </span>
+              </span>
+            </div>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+        </div>
+        <div v-else>
+          <el-upload
+              class="upload-demo"
+              action="action"
+              :header="headers"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :on-success="handeleSuccess"	
+              :on-error="handeleError"
+              :before-upload="beforeUpload"
+              :before-remove="beforeRemove"
+              :accept=acceptFileType
+              :show-file-list=showLileList
+              multiple
+              :limit="limitNum"
+              :on-exceed="handleExceed"
+              :file-list="fileList">
+              <el-button size="small" type="primary" >点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传{{acceptFileType}}文件，大小不超过{{limitSize}}</div>
+          </el-upload>
+        </div>
       </el-col>
     </el-row>
     <!-- <span slot="footer" class="dialog-footer">
@@ -42,51 +86,77 @@
       acceptFileType: String,//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
       limitNum: Number,//限制文件个数
       limitSize: String,//限制文件大小,最小为1M，并以M为单位
-      acceptApi:String,//接口地址
+      acceptApi: String,//接口地址
+      showLileList: Boolean,//是否显示上传列表
+      preview: Boolean,//是否是显示缩略图的形式
+      request:Boolean
     },
     data() {
       return {
         fileList: [],//存放文件列表[{name: '', url: ''}]
-        uploadTemplateDialog:false,
+        itemList: [],
         downLoadLoading:'',
+        dialogImageUrl: '',
+        dialogVisible: false,
+        disabled: false,
+        
       };
     },
     methods: {
-      //打开上传模态框 ok
-      /* uploadFile(){
-        //var that = this
-        this.fileList=[];
-        this.uploadTemplateDialog=true;
-        setTimeout(function(){
-            //清空已上传的文件列表
-            //this.$refs.upload.clearFiles();
-        },100);
-      }, */
-      //确认上传 按钮
-      /* submitUpload(){
-        this.uploadLoading=true;
-        //var that = this
-        setTimeout(function () {
-          if(this.$refs.upload.$children[0].fileList.length==1){
-            debugger
-            this.$refs.upload.submit();//手动触发提交上传
-          }else{           
-            this.$message({
-              type:'error',
-              showClose:true,
-              duration:3000,
-              message:'请选择文件!'
-            });
-          };
-        },100);
-      }, */
       //文件列表移除文件时的钩子
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
+      handleRemove(file) {
+        debugger 
+        console.log(file.name);
+        let removeIndex = 0
+        let removeUrl = ''
+        let removeData = {}
+        this.itemList.map((item,index) => {
+          if(item.name === file.name){
+            removeIndex = index
+            removeUrl = item.postUrl
+            removeData = item.fd
+            return{ removeIndex, removeUrl, removeData}
+          }
+        })
+        itemList.splice(index,1)
+        if(this.request){
+          axios({
+          method: "delete", //请求类型
+          url: removeUrl, //请求地址,端口号
+          data: removeData, //request body
+          headers: {
+            "Content-Type": "multipart/form-data;boundary=" + new Date().getTime()
+          } //自定义请求头
+          }).then(rsp => {
+            //请求成功，发送成功
+            let resp = rsp.data;
+            if (resp.resultCode == 200) {
+              this.$notify(resp.resultMsg);
+              //this.queryData();//更新数据
+            } else {
+              //发送失败
+              this.$notify({
+                background: "#f44",
+                showClose: true,
+                duration: 3000,
+                message: resp.resultMsg
+              });
+            }
+          }).catch(error => {
+            //请求失败
+            this.$notify({
+              background: "#f44",
+              showClose: true,
+              duration: 3000,
+              message: "请求失败! error:" + error
+            });
+          })
+        }
       },
-      //点击已上传的文件链接时的钩子, 可以通过 
+      //点击已上传的文件链接时的钩子
       handlePreview(file) {
-        console.log(file);
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
       },
       //文件超出个数限制时的钩子
       handleExceed(files, fileList) {
@@ -94,7 +164,16 @@
       },
       //文件上传成功
       handeleSuccess(files, fileList) {
-        
+        this.downloadLoading.close();
+        console.log(this.fileList,'fileList')
+        debugger
+      },
+      //文件上传失败
+      handeleError(file) {
+        this.downloadLoading.close();
+        //此时更新itemList数组
+        this.$refs.upload.clearFiles()
+
       },
       //删除文件之前的钩子，参数为上传的文件和文件列表，
       beforeRemove(file, fileList) {
@@ -106,84 +185,86 @@
         //判断大小,取出页面传递指定大小
         let limitSize = this.limitSize.split('M')[0]
         //取出页面指定文件类型
-        let acceptFile = acceptFileType.split(",")
-        //判断文件类型
-        let fileName=file.name.substring(file.name.lastIndexOf('.')+1);
+        //let acceptFile = acceptFileType.split(",")
         //判断文件类型是否相符
-        acceptFile.map(item => { 
-          if(fileName != item){
-            debugger
-            this.uploadTemplateDialog=false;
-            this.$message({
-              type:'error',
-              showClose:true,
-              duration:3000,
-              message:`文件类型不是${item}文件!`
-            });
-          return ;
-          }
-        })
+        const name = file.name ? file.name : '';//file.name为true 赋值给a，否则赋值空串
+        //let fileName=name.substring(name.lastIndexOf('.')+1);
+        const fileName = name.substr(name.lastIndexOf('.') + 1, name.length) //上传文件类型截取，截取(最右侧出现第一个()的位置，截取末端的位置)
+        debugger
+        const ext = fileName ? fileName : true;//filename为true 赋值给ext，否则赋值true
+        debugger
+        const isExt = this.acceptFileType.indexOf(ext) < 0;//判断文件类型在索引值中的位置,如果存在为否,不存在为真
+        debugger
+        if (isExt) {//存在不执行
+          this.$message.error('请上传正确的格式类型');
+          return !isExt;
+        }
+        debugger
         //读取文件大小
         let fileSize=file.size;
         limitSize = parseFloat(limitSize)*1024*1024
         if( fileSize > limitSize ){
           debugger
-          this.uploadTemplateDialog=false;
           this.$message({
             type:'error',
             showClose:true,
             duration:3000,
             message:`文件大于${this.limitSize}!`
           });
-          return ;
+          return false;
         }
-
-        this.downloadLoading=this.$loading({
+        /* this.downloadLoading=this.$loading({
           lock:true,
           text:'数据导入中...',
           spinner:'el-icon-loading',
           background:'rgba(0,0,0,0.7)'
-        })
+        }) */
         let fd = new FormData()// 将数据包装成form
         fd.append('file',file)
         fd.append('_t1',new Date())
+        let postUrl = acceptApi+new Date().getTime()
         debugger
         console.log(fd)
         debugger
-        axios({
-            method:'post',//请求类型
-            url:acceptApi+new Date().getTime(),//请求地址,端口号
-            data:fd, //request body
-            headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}//自定义请求头
-          }).then( rsp => {//请求成功，发送成功
-            this.downloadLoading.close();
-            let resp=rsp.data
-            if(resp.resultCode==200){
-              this.uploadTemplateDialog=false;
-              this.$message.success(resp.resultMsg);
-              //this.queryData();//更新数据
-            }else{//发送失败
-              this.uploadTemplateDialog=false;
+        if(this.request){
+          axios({
+              method:'post',//请求类型
+              url:postUrl,//请求地址,端口号
+              data:fd, //request body
+              headers:{"Content-Type":"multipart/form-data;boundary="+new Date().getTime()}//自定义请求头
+            }).then( rsp => {//请求成功，发送成功
+              this.downloadLoading.close();
+              debugger
+              let resp=rsp.data
+              if(resp.resultCode==200){
+                this.$message.success(resp.resultMsg);
+                //this.queryData();//更新数据
+              }else{//发送失败
+                this.downloadLoading.close();
+                this.$message({
+                  type:'error',
+                  showClose:true,
+                  duration:3000,
+                  message:resp.resultMsg
+                })
+              }
+            }).catch( error => {//请求失败
+            debugger
+            //this.$refs.upload.clearFiles();
+              this.downloadLoading.close();
+              debugger
               this.$message({
                 type:'error',
                 showClose:true,
                 duration:3000,
-                message:resp.resultMsg
+                message:'请求失败! error:'+error
               })
-            }
-            this.$refs.upload.submit();
-          }).catch( error => {//请求失败
-          this.$refs.upload.clearFiles();
-            this.downloadLoading.close();
-            this.uploadTemplateDialog=false;
-            this.$message({
-              type:'error',
-              showClose:true,
-              duration:3000,
-              message:'请求失败! error:'+error
-            })
-        })
-        return false;//屏蔽 action
+          })
+          this.itemList.push({fileName:file.name,postUrl,fd,})
+          console.log(this.itemList,'itemList')
+          debugger
+          return false;//屏蔽 action
+        }
       }
     },
     computed: {

@@ -19,7 +19,7 @@ import upload from './components/Ele/upload.vue'//Ele-ui上传
 import uploader from './components/Vant/uploader.vue'//vant上传
 Vue.config.productionTip = false
 //Ele-ui按需引入
-import { Button,Dialog,Upload,Row,Col,Icon,Message,MessageBox,Loading } from 'element-ui';
+/* import { Button,Dialog,Upload,Row,Col,Icon,Message,MessageBox,Loading } from 'element-ui';
 //Ele-ui注册
 Vue.component(Upload.name, Upload);
 Vue.component(Dialog.name, Dialog);
@@ -34,16 +34,16 @@ Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;//绑定在原型对象上
 Vue.prototype.$alert = MessageBox.alert;
-Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$confirm = MessageBox.confirm; */
 //vant按需引入
-/* import { Button,Uploader,Notify,SwipeCell,Cell,CellGroup,Dialog } from 'vant';
+import { Button,Uploader,Notify,SwipeCell,Cell,CellGroup,Dialog } from 'vant';
 //vant注册
 Vue.use(Button)
 Vue.use(Uploader)
 Vue.use(Notify)
 Vue.use(SwipeCell)
 Vue.use(Dialog)
-Vue.use(Cell).use(CellGroup) */
+Vue.use(Cell).use(CellGroup)
 //注册全局组件
 Vue.component('annularChart',annularChart)
 Vue.component('barChart',barChart)
