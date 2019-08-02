@@ -45,7 +45,6 @@
 
 <script>
 import axios from "axios";
-//import uploader from './node_modules/vant/uploader/index.js'
 export default {
   props: {
     maxCount: Number, //最大上传个数
