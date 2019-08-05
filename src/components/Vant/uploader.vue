@@ -71,17 +71,16 @@ export default {
   data() {
     return {
       itemList: [],
-      fileList:[],
+      fileList: [],
     };
   },
   mounted() {
-    this.calcMaxSize()
+    console.log(this.maxSizeCalc)
+    debugger
   },
   methods: {
     //文件读取前的回调函数
     beforeRead(file) {
-      //this.calcMaxSize
-      console.log(maxSizeCalc)
       debugger
       //进行类型的判断和大小的判断
       //判断最大情况
@@ -111,7 +110,6 @@ export default {
           });
           return false
         }
-        
         if(!numState){
           return numState
         }
@@ -123,7 +121,7 @@ export default {
       if(file.length){
         let typeStatus = 1
         file.map(item => {
-          if(item.type.split("/")[0] !== accept || item.size > this.calcMaxSize){
+          if(item.type.split("/")[0] !== accept || item.size > this.maxSizeCalc){
             typeStatus = 0
             this.$notify({
               background: "#f44",
@@ -293,11 +291,13 @@ export default {
     }
   },
   computed: {
-    calcMaxSize() {
-      let maxSizeCalc = this.maxSize * 1024 * 1024;
-      return maxSizeCalc;
+    maxSizeCalc() {
+      // getter: 初始显示/ 相关的状态数据发生变化时自动调用
+      return this.maxSize * 1024 * 1024;
+      // setter: 当属性值发生了改变时自动调用
+      // set(){}
     }
-  }
+  },
 };
 </script>
 

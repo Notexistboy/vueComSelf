@@ -82,6 +82,7 @@
 <script>
   import axios from 'axios'
   export default {
+    name: 'upload',
     props:{
       acceptFileType: String,//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
       limitNum: Number,//限制文件个数
