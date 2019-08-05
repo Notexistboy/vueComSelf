@@ -52,6 +52,7 @@ Vue.component('fanChart',fanChart)
 Vue.component('pieChart',pieChart)
 Vue.component('upload',upload)
 Vue.component('uploader',uploader)
+Vue.prototype.$EventBus = new Vue()
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

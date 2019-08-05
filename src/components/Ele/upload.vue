@@ -265,7 +265,8 @@
           debugger
           return false;//屏蔽 action
         }
-      }
+      },
+      
     },
     computed: {
       headers(){
