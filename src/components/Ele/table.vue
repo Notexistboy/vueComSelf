@@ -4,19 +4,22 @@
 * 2019.07.30
 -->
 <template>
-  <el-table
-    :data="tableData"
-    style="width: 100%">
-    <el-table-column 
-      v-for="(item, index) in this.tableHead" 
-      :key="index"  
-      :prop="item.prop" 
-      :label="item.label" 
-      :width="item.width"
-      :fixed=fixed
-    >
-    </el-table-column>
-  </el-table>
+  <div  ref="tableContainer">
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column 
+        v-for="(item, index) in this.tableHead" 
+        :key="index"  
+        :prop="item.prop" 
+        :label="item.label" 
+        :width="item.width"
+        :fixed=fixed
+      >
+      </el-table-column>
+    </el-table>
+  </div>
+  
 </template>
 
 <script>

@@ -6,7 +6,7 @@
 <template>
   <div>
   <!--上传-->
-    <el-row>
+    <el-row ref="uploadContainer" >
       <el-col :span="22">
         <div v-if="preview"><!-- :header="headers" -->
           <el-upload

@@ -4,7 +4,7 @@
 * 2019.08.01
 -->
 <template>
-  <div>
+  <div ref="uploaderContainer" >
     <div v-if=preview>
       <van-uploader
         :after-read="afterRead"
@@ -75,7 +75,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.maxSizeCalc)
+    this.maxSizeCalc
     debugger
   },
   methods: {
