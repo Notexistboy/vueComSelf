@@ -80,7 +80,7 @@
     },
     methods: {
       selectOper(value){
-        console.log(this.$refs)
+        console.log(this.$refs.eleTable)
         debugger
         this.multipleSelection = value;
       },
@@ -88,12 +88,12 @@
         if (rows) {
           debugger
           rows.forEach(row => {
-            this.$refs.$refs.multipleTable.toggleRowSelection(row);
+            this.$refs.eleTable.$refs.multipleTable.toggleRowSelection(row);
           });
         } else {
           console.log(this.$refs)
           debugger
-          this.$refs.$refs.multipleTable.clearSelection();
+          this.$refs.eleTable.$refs.multipleTable.clearSelection();
         }
       },
       search(obj){
