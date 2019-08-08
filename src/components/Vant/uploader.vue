@@ -12,7 +12,7 @@
         v-model="fileList"
         :max-count="maxCount"
         :max-size="maxSize*1024*1024"
-        :multiple="multiple"
+        :multiple=multiple
         :preview-size="previewSize" 
         @delete="deleteItem"
       />
@@ -23,7 +23,6 @@
       </ul>
     </div>
     <div v-else>
-
       <van-uploader
         :accept="acceptFileType"
         :after-read="afterRead"

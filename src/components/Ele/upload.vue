@@ -221,7 +221,7 @@
           background:'rgba(0,0,0,0.7)'
         }) */
         let fd = new FormData()// 将数据包装成form
-        fd.append('file',file)
+        fd.append('file',file)//后端读取formdata时需要匹配 'file'属性名
         fd.append('_t1',new Date())
         let postUrl = acceptApi+new Date().getTime()
         debugger

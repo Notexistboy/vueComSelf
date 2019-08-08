@@ -2,12 +2,17 @@ import Vue from 'vue'
 import Router from 'vue-router'
 //import routes from './routes'
 import Index from '@/pages/index.vue'
+//import voTablePush from '@/pages/voTablePush.vue'
 Vue.use(Router)
 const routes =  [
     {
         path: '/index',
         component: Index
     },
+/*     {
+        path: '/voTablePush',
+        component: voTablePush
+    }, */
     {
         path:'/',
         redirect:'/index'
