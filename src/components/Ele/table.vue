@@ -5,7 +5,7 @@
 -->
 <template>
   <div  ref="tableContainer" :style="{width: width, height: height}">
-    <div style="margin-bottom: 1vh; position:absolute; left:0; right:0" v-if="selbut">
+    <div style="margin-bottom: 1vh; position:absolute; left:0; top:0" v-if=selbut>
       <el-button @click="toggleSelection()">{{buttonTxt}}</el-button>
     </div>
     <el-table
@@ -18,7 +18,7 @@
       :height='height'
     ><!--tableData填充表格数据-->
       <el-table-column
-        
+        v-if=selbut
         type="selection"
         width="55" /><!--选择标签-->
       <el-table-column 
@@ -68,8 +68,8 @@
       pages: Object,//总数，分页器用
       defaultSort: Object,//默认排序方式
       getTable: Object,//请求参数
-      buttonTxt: String,
-      selbut: Boolean,
+      buttonTxt: String,//按钮文本
+      selbut: Boolean,//是否需要左侧选择栏和上方按钮
     },
     data () {
       return {

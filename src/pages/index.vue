@@ -53,7 +53,7 @@
           orderBy:''
         },//请求参数
         buttonTxt:"按钮文本",
-        selbut: false,//是否需要左侧选择栏和上方按钮
+        selbut: true,//是否需要左侧选择栏和上方按钮
         //Vant
         /* buttonTxt: "ok",
         maxCount: 1,//限制文件最大个数，数值型
