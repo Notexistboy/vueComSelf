@@ -53,7 +53,6 @@
     </div>
   </div>
 </template>
-
 <script>
   import {EventBus} from '../eventbus'
   export default {

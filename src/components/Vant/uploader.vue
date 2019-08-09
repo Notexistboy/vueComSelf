@@ -52,7 +52,6 @@
   height: 30px;
 } 修改样式类名
 */
-import {EventBus} from '../eventbus'
 import axios from "axios";
 export default {
   props: {
@@ -174,17 +173,13 @@ export default {
         let postUrl = acceptApi + new Date().getTime() //请求地址,端口号
         console.log(fd)
         if( maxCount == 1 && length == 1 ){//如果要求最大值是1且数组有长度
-        
           postMethod = "patch"
           //Vue.set(this.itemList, 0, {fileName:item.file.name,postUrl,fd,});
           this.$set(this.itemList, 0, {fileName:item.file.name,postUrl,fd,});
           this.itemList[0]={fileName:item.file.name,postUrl,fd,}
         }else{
-          
           this.itemList.push({fileName:item.file.name,postUrl,fd,})
         }
-        //调用事件车
-        this.postItemList()
         if(this.request){
           axios({
             method: postMethod, //请求类型
@@ -217,12 +212,15 @@ export default {
                 message: "请求失败! error:" + error
               });
           })
+        }else if(preview){
+          this.$emit('action', this.fileList)
+        }else{
+          this.$emit('action', this.itemList)
         }
       })
       console.log(this.fileList,'fileList')//文件模式，没有数据
       console.log(this.itemList,'itemList')//文件模式只存在这一个对象
       debugger
-
     },
     //滑动单元格方法
     onClose(clickPosition, instance, detail) {
@@ -246,8 +244,6 @@ export default {
     deleteItem(index){
       let item = this.itemList[index]
       this.itemList.splice(index,1)
-      //调用事件车
-      this.postItemList()
       if(this.request){
         axios({
           method: "delete", //请求类型
@@ -280,14 +276,12 @@ export default {
               message: "请求失败! error:" + error
             });
         })
-      }
+      }else if(preview){
+          this.$emit('change', this.fileList)
+        }else{
+          this.$emit('change', this.itemList)
+        }
     },
-    //事件车,如何更新
-    postItemList(){
-      const itemList = this.itemList
-      debugger
-      EventBus.$emit('itemList',itemList)
-    }
   },
   computed: {
     maxSizeCalc() {

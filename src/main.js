@@ -17,11 +17,11 @@ import curveChart from './components/Echarts/curveChart.vue'//折线图
 import pieChart from './components/Echarts/pieChart.vue'//饼状图
 import upload from './components/Ele/upload.vue'//Ele-ui上传
 import eleTable from './components/Ele/table.vue'//Ele-ui表格
-import voTable from './components/Ele/voTable.vue'//Ele-ui表格
+import dropdown from './components/Ele/dropdown.vue'//Ele-ui表格
 import uploader from './components/Vant/uploader.vue'//vant上传
 Vue.config.productionTip = false
 //Ele-ui按需引入
-import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch } from 'element-ui';
+import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch,Dropdown,DropdownMenu,DropdownItem, } from 'element-ui';
 //Ele-ui注册
 Vue.component(Upload.name, Upload);
 Vue.component(Table.name, Table);
@@ -33,6 +33,9 @@ Vue.component(Col.name, Col);
 Vue.component(Icon.name, Icon);
 Vue.component(Pagination.name, Pagination);
 Vue.component(Switch.name, Switch);
+Vue.component(Dropdown.name, Dropdown);
+Vue.component(DropdownMenu.name, DropdownMenu);
+Vue.component(DropdownItem.name, DropdownItem);
 Vue.use(Loading.directive);
 
 //全局配置
@@ -61,7 +64,7 @@ Vue.component('pieChart',pieChart)
 Vue.component('upload',upload)
 Vue.component('eleTable',eleTable)
 Vue.component('uploader',uploader)
-Vue.component('voTable',voTable)
+Vue.component('dropdown',dropdown)
 Vue.prototype.$EventBus = new Vue()
 /* eslint-disable no-new */
 new Vue({

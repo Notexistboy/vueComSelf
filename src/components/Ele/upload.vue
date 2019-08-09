@@ -11,7 +11,7 @@
         <div v-if="preview"><!-- :header="headers" -->
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="action"
             :on-success="handeleSuccess"	
             :on-error="handeleError"
             :before-upload="beforeUpload"
@@ -104,6 +104,10 @@
       };
     },
     methods: {
+      //删除文件之前的钩子，参数为上传的文件和文件列表，
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${file.name}？`);
+      },
       //文件列表移除文件时的钩子
       handleRemove(file) {
         debugger 
@@ -119,7 +123,7 @@
             return{ removeIndex, removeUrl, removeData}
           }
         })
-        itemList.splice(index,1)
+        this.itemList.splice(index,1)
         if(this.request){
           axios({
           method: "delete", //请求类型
@@ -152,6 +156,8 @@
               message: "请求失败! error:" + error
             });
           })
+        }else{
+          this.$emit('change', this.itemList)
         }
       },
       //点击已上传的文件链接时的钩子
@@ -162,23 +168,6 @@
       //文件超出个数限制时的钩子
       handleExceed(files, fileList) {
         this.$message.warning(`当前限制选择${this.limitNum}个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-      },
-      //文件上传成功
-      handeleSuccess(files, fileList) {
-        this.downloadLoading.close();
-        console.log(this.fileList,'fileList')
-        debugger
-      },
-      //文件上传失败
-      handeleError(file) {
-        this.downloadLoading.close();
-        //此时更新itemList数组
-        this.$refs.upload.clearFiles()
-
-      },
-      //删除文件之前的钩子，参数为上传的文件和文件列表，
-      beforeRemove(file, fileList) {
-        return this.$confirm(`确定移除 ${file.name}？`);
       },
       //上传文件之前的钩子，参数为上传的文件
       beforeUpload(file){
@@ -265,9 +254,23 @@
           console.log(this.itemList,'itemList')
           debugger
           return false;//屏蔽 action
+        }else{
+          this.$emit('action',this.itemList)
         }
       },
-      
+      //文件上传成功
+      handeleSuccess(files, fileList) {
+        this.downloadLoading.close();
+        console.log(this.fileList,'fileList')
+        debugger
+      },
+      //文件上传失败
+      handeleError(file) {
+        this.downloadLoading.close();
+        //此时更新itemList数组
+        this.$refs.upload.clearFiles()
+
+      },
     },
     computed: {
       headers(){

@@ -1,14 +1,16 @@
 <template>
   <div>
-    <!-- <upload :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize" :acceptApi="acceptApi" :showLileList="showLileList" :preview="preview" :request="request"/> -->
-    <!-- <uploader :maxCount="maxCount" :acceptFileType="acceptFileType" :acceptApi="acceptApi" :maxSize="maxSize" :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize" :slide="slide" :buttonTxt="buttonTxt" /> -->
-    <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height" :width="width" 
-              @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/>
+    <!-- <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
+                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="preview" :request="request"/> -->
+    <!-- <uploader @action="action" @change="change" :maxCount="maxCount" :acceptFileType="acceptFileType" :acceptApi="acceptApi" :maxSize="maxSize" 
+                  :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize" :slide="slide" :buttonTxt="buttonTxt" /> -->
+    <!-- <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height"
+                  :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
+          <dropdown :itemList="itemList" @commandOper="commandOper"/>
   </div>
 </template>
 
 <script>
-  import {EventBus} from '../components/eventbus'
   export default {
     data () {
       return {
@@ -20,9 +22,9 @@
           showLileList:true,//是否显示上传列表
           preview:true,//是否是显示缩略图的形式
           request:false,//是否在提交时立即发送请求 */
-        //Element-UI-Table
 
-        tableHead: [{prop:'date', label:"日期", width:"180", fixed: 'left' }, 
+        //Element-UI-Table
+        /* tableHead: [{prop:'date', label:"日期", width:"180", fixed: 'left' }, 
                     {prop:'name', label:"姓名", width:"180", fixed: false }, 
                     {prop:'address', label:"地址", width:"180", fixed: false }],//表格头部样式，props对应每一列属性，label为显示文字，width为每一列宽度
         tableData: [{date: '2016-05-02', name: '王小虎', address: '上海市',}, 
@@ -53,8 +55,12 @@
           orderBy:''
         },//请求参数
         buttonTxt:"按钮文本",
-        selbut: true,//是否需要左侧选择栏和上方按钮
-        //Vant
+        selbut: true,//是否需要左侧选择栏和上方按钮 */
+
+        //Element-UI-Dropdown
+        itemList:['黄金糕', '狮子头', '螺蛳粉', '双皮奶', '蚵仔煎']
+
+        //Vant-Uploader
         /* buttonTxt: "ok",
         maxCount: 1,//限制文件最大个数，数值型
         acceptFileType: "image/*",//限制文件上传类型，照片类型为image/*，文本文档为text/*，pdf、word为application/*
@@ -69,17 +75,34 @@
     },
     
     mounted() {
-      EventBus.$on('itemList', (itemList) => {
-        debugger
-        console.log(itemList)
-      })
+
+      //Ele-Table
       /* axios.post(‘你的后台API地址’,this.getTable).then((res) => {
         this.tableData = res.data.result;
         this.total = res.data.total
-      }) */
+      }) */ 
+
     },
     methods: {
-      selectOper(value){
+      //Ele-Upload
+      //添加文件或修改时操作
+      /* action(obj){
+        this.$post(‘你的后台API地址’,this.getTable).then((res) => {
+          this.tableData = res.data.result;
+          this.total = res.data.total
+        }) 
+      },
+      //删除时操作
+      change(obj){
+        this.$delete(‘你的后台API地址’,this.getTable).then((res) => {
+          this.tableData = res.data.result;
+          this.total = res.data.total
+        }) 
+      },
+      */
+
+      //Ele-Table
+      /*selectOper(value){
         console.log(this.$refs.eleTable)
         debugger
         this.multipleSelection = value;
@@ -96,15 +119,17 @@
           this.$refs.eleTable.$refs.multipleTable.clearSelection();
         }
       },
+      //搜索时发送的请求
       search(obj){
         this.getTable.pageSize = obj.pageSize;
         this.getTable.pageNo = obj.pageNo;
         this.getTable.orderBy = obj.orderBy;
-        /* this.$post(‘你的后台API地址’,this.getTable).then((res) => {
+        this.$post(‘你的后台API地址’,this.getTable).then((res) => {
           this.tableData = res.data.result;
           this.total = res.data.total
-        }) */
+        }) 
       },
+      //表格操作按钮的方法
       action(obj){
         if(obj.methods === 'detail'){
             console.log('这里添加详情函数')
@@ -112,7 +137,30 @@
           if(obj.methods === 'delete'){
           console.log('这里添加删除函数')
         }
+      },*/
+
+      //Ele-dropdown
+      /*commandOper(command){
+        this.$post(‘你的后台API地址’,command).then((res) => {
+        })
+      } */
+
+      //Vant-Uploader
+      //添加文件或修改时操作
+      /* action(obj){
+        this.$post(‘你的后台API地址’,this.getTable).then((res) => {
+          this.tableData = res.data.result;
+          this.total = res.data.total
+        }) 
       },
+      //删除时操作
+      change(obj){
+        this.$delete(‘你的后台API地址’,this.getTable).then((res) => {
+          this.tableData = res.data.result;
+          this.total = res.data.total
+        }) 
+      },
+      */
     },
   }
 </script>
