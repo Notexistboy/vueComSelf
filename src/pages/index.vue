@@ -1,12 +1,12 @@
 <template>
   <div>
-    <!-- <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
-                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="preview" :request="request"/> -->
+    <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
+                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="preview" :request="request"/>
     <!-- <uploader @action="action" @change="change" :maxCount="maxCount" :acceptFileType="acceptFileType" :acceptApi="acceptApi" :maxSize="maxSize" 
                   :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize" :slide="slide" :buttonTxt="buttonTxt" /> -->
     <!-- <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height"
                   :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
-          <dropdown :itemList="itemList" @commandOper="commandOper"/>
+    <!-- <dropdown :itemList="itemList" @commandOper="commandOper"/> -->
   </div>
 </template>
 
@@ -15,13 +15,13 @@
     data () {
       return {
         //Element-UI-Upload
-        /* acceptFileType: "ico,png,jpg",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
+        acceptFileType: "ico,png,jpg",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
           limitNum: 5, //限制文件个数，数值型
           limitSize: '5M',//限制文件大小,最小为1M，并以M为单位
           acceptApi: '/api/uploader/',//接口地址
           showLileList:true,//是否显示上传列表
           preview:true,//是否是显示缩略图的形式
-          request:false,//是否在提交时立即发送请求 */
+          request:false,//是否在提交时立即发送请求
 
         //Element-UI-Table
         /* tableHead: [{prop:'date', label:"日期", width:"180", fixed: 'left' }, 
@@ -86,20 +86,20 @@
     methods: {
       //Ele-Upload
       //添加文件或修改时操作
-      /* action(obj){
-        this.$post(‘你的后台API地址’,this.getTable).then((res) => {
+      action(obj){
+        /* this.$post(‘你的后台API地址’,this.getTable).then((res) => {
           this.tableData = res.data.result;
           this.total = res.data.total
-        }) 
+        })  */
       },
       //删除时操作
       change(obj){
-        this.$delete(‘你的后台API地址’,this.getTable).then((res) => {
+        /* this.$delete(‘你的后台API地址’,this.getTable).then((res) => {
           this.tableData = res.data.result;
           this.total = res.data.total
-        }) 
+        })  */
       },
-      */
+     
 
       //Ele-Table
       /*selectOper(value){

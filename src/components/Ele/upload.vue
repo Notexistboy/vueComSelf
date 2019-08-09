@@ -11,7 +11,7 @@
         <div v-if="preview"><!-- :header="headers" -->
           <el-upload
             class="upload-demo"
-            action="action"
+            action="https://jsonplaceholder.typicode.com/posts/"
             :on-success="handeleSuccess"	
             :on-error="handeleError"
             :before-upload="beforeUpload"
