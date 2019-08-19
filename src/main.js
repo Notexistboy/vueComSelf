@@ -21,7 +21,7 @@ import dropdown from './components/Ele/dropdown.vue'//Ele-ui表格
 import uploader from './components/Vant/uploader.vue'//vant上传
 Vue.config.productionTip = false
 //Ele-ui按需引入
-import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch,Dropdown,DropdownMenu,DropdownItem, } from 'element-ui';
+/* import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch,Dropdown,DropdownMenu,DropdownItem, } from 'element-ui';
 //Ele-ui注册
 Vue.component(Upload.name, Upload);
 Vue.component(Table.name, Table);
@@ -44,7 +44,7 @@ Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;//绑定在原型对象上
 Vue.prototype.$alert = MessageBox.alert;
-Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$confirm = MessageBox.confirm; */
 
 //vant按需引入
 /* import { Button,Uploader,Notify,SwipeCell,Cell,CellGroup,Dialog } from 'vant';
@@ -61,10 +61,10 @@ Vue.component('barChart',barChart)
 Vue.component('curveChart',curveChart)
 Vue.component('fanChart',fanChart)
 Vue.component('pieChart',pieChart)
-Vue.component('upload',upload)
+/* Vue.component('upload',upload)
 Vue.component('eleTable',eleTable)
 Vue.component('uploader',uploader)
-Vue.component('dropdown',dropdown)
+Vue.component('dropdown',dropdown) */
 Vue.prototype.$EventBus = new Vue()
 /* eslint-disable no-new */
 new Vue({

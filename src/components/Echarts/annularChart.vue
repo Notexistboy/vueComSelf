@@ -20,7 +20,6 @@ export default {
     return {
       legendData:[],
       listData: [],
-      seriesData: [],
       arrayData:[]
     };
   },
