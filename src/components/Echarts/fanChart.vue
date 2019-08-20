@@ -19,16 +19,14 @@
     data () {
       return {
         titleData: [],
-        legendData:[],
         seriesData: [],
-        arrayData:[],
         listData:[],
       }
     },
     mounted(){
       this.percentNum
       this.getData
-      const { title,legendData,titleData,seriesData } = this
+      const { titleData,seriesData } = this
       let myChart = echarts.init(this.$refs.fanChartContainer)
       myChart.setOption({
         title:titleData,
@@ -38,7 +36,7 @@
     methods: {},
     computed: {
       getData(){
-        const { fanData,titleData,legendData,listData,arrayData,seriesData } = this
+        const { fanData,titleData,listData,seriesData } = this
         var color = ['#08c','#fa5','#c03', '#609','#703','#0fc']
         fanData.forEach(function(item, index){
           titleData.push({

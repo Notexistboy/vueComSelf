@@ -26,7 +26,7 @@
     },
     mounted() {
       this.getData
-      const { title,legendData,arrayData,listData } = this
+      const { title,legendData,listData } = this
       let myChart = echarts.init(this.$refs.pieChartContainer)
       myChart.setOption({
         title: { 
