@@ -54,7 +54,6 @@
   </div>
 </template>
 <script>
-  import {EventBus} from '../eventbus'
   export default {
     name: 'eleTable',
     props: {
@@ -107,6 +106,6 @@
   }
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
+<style>
 
 </style>

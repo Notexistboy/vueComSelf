@@ -5,7 +5,7 @@
 -->
 <template>
   <div>
-    <div ref="fanChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="fanChartContainer" style="width:100%; height:100%; z-index:1"></div>
   </div>
 </template>
 
@@ -125,6 +125,6 @@
   }
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
+<style>
 
 </style>

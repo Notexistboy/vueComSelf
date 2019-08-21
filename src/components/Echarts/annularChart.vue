@@ -5,7 +5,7 @@
 -->
 <template>
   <div>
-    <div ref="annularChartContainer" style="width:500px; height:500px; z-index:1"></div>
+    <div ref="annularChartContainer" style="width:100%; height:100%; z-index:1"></div>
   </div>
 </template>
 
@@ -120,4 +120,4 @@ export default {
 };
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'></style>
+<style></style>

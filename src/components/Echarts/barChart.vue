@@ -4,9 +4,9 @@
 * 2019.07.23
 -->
 <template>
-  <div style="position:relative; display:block width:500px; height:500px; ">
-    <div ref="barChartContainer" style="width:500px; height:500px; position:absolute;  top:0; left:0; z-index:1" @click="change"></div>
-    <div ref="barChartShadow" style="width:500px; height:500px; position:absolute;  top:0; left:0;"  @click="change"></div>
+  <div style="width:100%; height:100%; position:relative; display:block">
+    <div ref="barChartContainer" style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:1" @click="change"></div>
+    <div ref="barChartShadow" style="width:100%; height:100%; position:absolute;  top:0; left:0;"  @click="change"></div>
   </div>
 </template>
 
