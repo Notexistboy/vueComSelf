@@ -12,6 +12,7 @@ import router from './router'
 //引入组件
 import annularChart from './components/Echarts/annularChart.vue'//环形图
 import barChart from './components/Echarts/barChart.vue'//柱状图
+import dashboardChart from './components/Echarts/dashboardChart.vue'//柱状图
 import fanChart from './components/Echarts/fanChart.vue'//扇形图
 import curveChart from './components/Echarts/curveChart.vue'//折线图
 import pieChart from './components/Echarts/pieChart.vue'//饼状图
@@ -58,6 +59,7 @@ Vue.use(Cell).use(CellGroup) */
 //注册全局组件
 Vue.component('annularChart',annularChart)
 Vue.component('barChart',barChart)
+Vue.component('dashboardChart',dashboardChart)
 Vue.component('curveChart',curveChart)
 Vue.component('fanChart',fanChart)
 Vue.component('pieChart',pieChart)

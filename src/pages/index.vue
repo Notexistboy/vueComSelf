@@ -7,11 +7,12 @@
     <!-- <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height"
                   :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
     <!-- <dropdown :itemList="itemList" @commandOper="commandOper"/> -->
-    <annularChart :annularData="obj1Data" :title="title" />
-    <barChart :barData="objData" :descript="descript" :title="title" :legend="legend"/>
-    <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend"/>
-    <pieChart :pieData="obj1Data" :title="title" />
-    <fanChart :fanData="data" :title="title" />
+    <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
+    <barChart :barData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
+    <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/>
+    <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
+    <pieChart :pieData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
+    <fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/>
   </div>
 </template>
 
@@ -33,6 +34,9 @@
         descript1: false,
         legend: '降雨量(ml)',
         title: '北京城市降雨',
+        value: 40,
+        min: 0,
+        max: 100,
         //Element-UI-Upload
         acceptFileType: "ico,png,jpg",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
           limitNum: 5, //限制文件个数，数值型
