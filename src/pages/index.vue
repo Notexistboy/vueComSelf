@@ -1,17 +1,17 @@
 <template>
   <div>
-    <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
+<!--     <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
                  :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/>
     <cupload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
-                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/>
+                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/> -->
     <!-- <uploader @action="action" @change="change" :maxCount="maxCount" :acceptFileType="acceptFileType" :acceptApi="acceptApi" :maxSize="maxSize" 
                   :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize" :slide="slide" :buttonTxt="buttonTxt" /> -->
     <!-- <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height"
                   :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
     <!-- <dropdown :itemList="itemList" @commandOper="commandOper"/> -->
-<!--     <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
-    <barChart :barData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
-    <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/>
+    <!--     <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/> -->
+    <barChart :barData="objData1" :descript="descript1" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
+    <!--    <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/>
     <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
     <pieChart :pieData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
     <fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/> -->
@@ -30,6 +30,7 @@
           '西城区':{'周一':50,'周二':55,'周三':60,'周四':70,'周五':60},
           '海淀区':{'周一':50,'周二':75,'周三':60,'周四':50,'周五':25}
         },
+        objData2: { "车辆": { "前往充装": 0, "入场排队": 45, "入场待审": 65, "入场充装": 85, "运输途中": 25, "其他": 50 } },
         obj1Data: {'洪茂达':100,'中海油':50,'大鹏':20,'光汇石油':30,'华安':20},
         data: [{name:'现代材料', value:25, common:100},{name:'现代材料', value:25, common:50},{name:'现代材料', value:75, common:75}],
         descript: true,

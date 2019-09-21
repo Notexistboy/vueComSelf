@@ -94,7 +94,17 @@ export default {
           },
           z: 10
         },
-        yAxis: yAxisData,
+        yAxis: {
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          }
+        },
         series: seriesDataShadow
       }
     },
@@ -110,21 +120,18 @@ export default {
 	},
 	computed: {
 		getData(){
+      debugger
 			let colorA = ['#009bee','#fd8a6c','#c03', '#609','#703','#0fc']
       let colorB = ['#00c9f8','#e96341','#c03', '#609','#703','#0fc']
-      
       const { barData,descript,legend,legendData,xAxisDatas,yAxisData,seriesData,seriesDataShadow } = this
-      let values= []
-      
+			let values= []
       for(let key in barData){
         legendData.push(key);   
         values.push(barData[key])//取得value
-        
         for(let item in barData[key]){
           xAxisDatas.push(item)
         }
       }
-      
       //遍历y轴,legendData对应y轴名称
 			//遍历value中的数据
       let obj={}
@@ -145,10 +152,8 @@ export default {
         //Ymax 值可能不同 单位不同 无法公用一个
         yMaxArr.push(Math.max.apply(null, obj["data_"+index]))
         yMinArr.push(Math.min.apply(null, obj["data_"+index]))
-        
         yMax = Math.max.apply(null, yMaxArr)
-        yMin = Math.min.apply(null, yMinArr)
-        
+        yMin = Math.min.apply(null, yMaxArr)
         itemLength = obj["data_"+index].length
         if(!descript){
           if(index==2){
@@ -162,7 +167,6 @@ export default {
             mix: Math.min.apply(null, obj["data_"+index]),
             max: Math.max.apply(null, obj["data_"+index]),
             interval: Math.ceil((Math.max.apply(null, obj["data_"+index]))/ 5),//刻度均匀分
-
             axisLabel: {
               formatter: '{value}'
             },
@@ -197,24 +201,17 @@ export default {
           },
         })
       })
-      
       //Y轴遍历 是同类，只有1个y轴
       if(descript){
-        console.log(yMin)
-        console.log(yMax)
-        
         yAxisData.push({
           type: 'value',
           name: legend,
           mix: yMin,
           max: yMax,
-          interval: Math.ceil(yMax/ 5),//刻度均匀分
           axisLabel: {
             formatter: '{value}'
           },
         })
-        console.log(yAxisData)
-        
       }else{
         seriesData.forEach((item,index) => {
           item['yAxisIndex']  = index
@@ -227,7 +224,6 @@ export default {
           //i不能混用 下面还要用i
           for (let j = 0; j < itemLength; j++) {
             dataShadow.push(yMax)
-            
           }
         }
         seriesDataShadow.push({
@@ -249,14 +245,11 @@ export default {
   },
   watch: {
     barData:{
-      immediate:true,
       handler:function(val,oldval){
-        if(Object.keys(this.barData).length != 0){
-          this.getData
-          this.getMyChart()
-          this.getMyShadow()
-          this.getNext()
-        }
+        this.getData
+        this.getMyChart()
+        this.getMyShadow()
+        this.getNext()
       },
       deep:true//对象内部的属性监听，也叫深度监听
     },

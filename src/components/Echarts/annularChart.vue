@@ -87,6 +87,7 @@ export default {
   methods: {},
   computed: {
     getData(){
+      debugger
       const { annularData,legendData,arrayData,listData } = this
       for (var key in annularData){
         legendData.push(key)
