@@ -18,6 +18,7 @@
     name: '',
     props: {
       itemList: Array,
+      originState: String,
     },
     data () {
       return {

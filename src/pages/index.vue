@@ -1,18 +1,20 @@
 <template>
   <div>
-    <!-- <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
-                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="preview" :request="request"/> -->
+    <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
+                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/>
+    <cupload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
+                 :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/>
     <!-- <uploader @action="action" @change="change" :maxCount="maxCount" :acceptFileType="acceptFileType" :acceptApi="acceptApi" :maxSize="maxSize" 
                   :multiple="multiple" :preview="preview" :request="request" :previewSize="previewSize" :slide="slide" :buttonTxt="buttonTxt" /> -->
     <!-- <eleTable ref="eleTable" :tableHead="tableHead" :tableData="tableData" :tableOption="tableOption" :pages="pages" :defaultSort="defaultSort" :height="height"
                   :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
     <!-- <dropdown :itemList="itemList" @commandOper="commandOper"/> -->
-    <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
+<!--     <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
     <barChart :barData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
     <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/>
     <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
     <pieChart :pieData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
-    <fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/>
+    <fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/> -->
   </div>
 </template>
 
@@ -38,7 +40,14 @@
         min: 0,
         max: 100,
         //Element-UI-Upload
-        acceptFileType: "ico,png,jpg",//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
+        acceptFileType: "doc,pdf,docx,txt,xlsx,js",
+        preview: false,
+        disableValue: false,
+        showMapDialog: false,
+        showSignDialog: false,
+        request: false,
+        showLileList: true,
+        mapMessage: false,//指定文件类型，保存成字符串格式，不同格式中间以英文逗号隔开,例"png,png,doc,docx"
           limitNum: 5, //限制文件个数，数值型
           limitSize: '5M',//限制文件大小,最小为1M，并以M为单位
           acceptApi: '/api/uploader/',//接口地址
@@ -110,6 +119,7 @@
       //Ele-Upload
       //添加文件或修改时操作
       action(obj){
+        debugger
         /* this.$post(‘你的后台API地址’,this.getTable).then((res) => {
           this.tableData = res.data.result;
           this.total = res.data.total
