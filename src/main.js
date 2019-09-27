@@ -23,7 +23,7 @@ import dropdown from './components/Ele/dropdown.vue'//Ele-ui表格
 import uploader from './components/Vant/uploader.vue'//vant上传
 Vue.config.productionTip = false
 //Ele-ui按需引入
-import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch,Dropdown,DropdownMenu,DropdownItem, } from 'element-ui';
+import { Button,Dialog,Upload,Table,TableColumn,Row,Col,Icon,Message,MessageBox,Loading,Pagination,Switch,Dropdown,DropdownMenu,DropdownItem,Input,Select } from 'element-ui';
 //Ele-ui注册
 Vue.component(Upload.name, Upload);
 Vue.component(Table.name, Table);
@@ -38,6 +38,10 @@ Vue.component(Switch.name, Switch);
 Vue.component(Dropdown.name, Dropdown);
 Vue.component(DropdownMenu.name, DropdownMenu);
 Vue.component(DropdownItem.name, DropdownItem);
+Vue.component(Input.name, Input);
+Vue.component(Select.name, Select);
+
+
 Vue.use(Loading.directive);
 
 //全局配置
