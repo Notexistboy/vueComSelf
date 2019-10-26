@@ -1,6 +1,7 @@
 {
   //预设
   "presets": [
+    ["es2015",{ "modules": false }],
     ["env", {
       "modules": false,
       "targets": {
@@ -10,29 +11,5 @@
     "stage-2"
   ],
   //插件
-  "plugins": ["transform-vue-jsx", "transform-runtime", 
-    [
-      "component",
-      {
-        "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
-      }
-    ],
-    //// 在.babelrc 中添加配置
-    ["import", {
-      "libraryName": "vant",
-      "libraryDirectory": "es",
-      "style": true
-    }]
-    // 对于使用 babel7 的用户，可以在 babel.config.js 中配置
-    /* module.exports = {
-      plugins: [
-        ['import', {
-          libraryName: 'vant',
-          libraryDirectory: 'es',
-          style: true
-        }, 'vant']
-      ]
-    }; */
-  ]
+  "plugins": ["transform-vue-jsx", "transform-runtime"]
 }
