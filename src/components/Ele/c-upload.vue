@@ -11,12 +11,13 @@
         <div v-if="preview"><!-- :header="headers" -->
           <el-upload
             class="upload-demo"
-            action="action"
+            :action="action"
             :on-success="handeleSuccess"
             :on-error="handeleError"
             :before-upload="beforeUpload"
             :on-remove="handleRemove"
             :accept=acceptFileType
+            :auto-upload="false"
             :show-file-list=showLileList
             multiple
             :limit="limitNum"
@@ -52,7 +53,7 @@
           <el-upload
               class="upload-demo"
               action="false"
-              :header="headers"
+              :auto-upload="false"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :on-success="handeleSuccess"	

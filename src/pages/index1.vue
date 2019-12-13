@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: relative">
 <!--     <upload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
                  :acceptApi="acceptApi" :showLileList="showLileList" :preview="false" :request="request"/>
     <cupload @action="action" @change="change" :acceptFileType="acceptFileType" :limitNum="limitNum" :limitSize="limitSize"
@@ -10,11 +10,17 @@
                   :width="width" @action="action" @search="search" @buttonOper="buttonOper" @selectOper="selectOper" :getTable="getTable" :buttonTxt="buttonTxt" :selbut="selbut"/> -->
     <!-- <dropdown :itemList="itemList" @commandOper="commandOper"/> -->
     <!--     <annularChart :annularData="obj1Data" :title="title" style="width: 500px; height: 500px"/> -->
-    <barChart :barData="objData1" :descript="descript1" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
-    <!--    <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/>
-    <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/>
-    <pieChart :pieData="obj1Data" :title="title" style="width: 500px; height: 500px"/>
-    <fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/> -->
+    <!-- <barChart :barData="objData1" :descript="descript1" :title="title" :legend="legend" style="width: 500px; height: 500px"/> -->
+    <!--    <dashboardChart value="40" :min="min" :max="max" :title="title" style="width: 500px; height: 500px"/> -->
+    <!-- <curveChart :curveData="objData" :descript="descript" :title="title" :legend="legend" style="width: 500px; height: 500px"/> -->
+    <div @mouseout="leavePie()" @mouseover="enterPie()" style="width: 500px; height: 500px; display: inline-block;">
+      <pieChart id="basePie" ref="basePie" :pieData="obj1Data" :title="title" @hover="pieHover" style="width: 100%; height: 100%;"/>
+    </div>
+    <div id="test" style="width: 250px; height: 250px; display: inline-block;">
+      <pieChart ref="floatPie" :pieData="obj1Data" style="width: 100%; height: 100%"/>
+    </div>
+    
+    <!--<fanChart :fanData="data" :title="title" style="width: 500px; height: 500px"/>  -->
   </div>
 </template>
 
@@ -41,7 +47,7 @@
         value: 40,//dashboard传递数值
         min: 0,//dashboard刻度最小值
         max: 100,//dashboard刻度最大值
-
+        state: false,
         //Element-UI-Upload
         acceptFileType: "doc,pdf,docx,txt,xlsx,js",
         preview: false,
@@ -122,7 +128,6 @@
       //Ele-Upload
       //添加文件或修改时操作
       action(obj){
-        debugger
         /* this.$post(‘你的后台API地址’,this.getTable).then((res) => {
           this.tableData = res.data.result;
           this.total = res.data.total
@@ -135,8 +140,14 @@
           this.total = res.data.total
         })  */
       },
-     
-
+      pieHover(obj) {
+      },
+      enterPie() {
+        this.state = true
+      },
+      leavePie() {
+        this.state = false
+      }
       //Ele-Table
       /*selectOper(value){
         console.log(this.$refs.eleTable)
@@ -202,5 +213,26 @@
 </script>
 
 <style>
-
+#test{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -125%);
+  background: #fff;
+  border-radius: 25px;
+  z-index: 1;
+  
+}
+  #test::before{
+    left: 50%;
+    bottom: -12%;
+    transform: translate(-50%, 0%);
+    display: inline-block;
+    content:'';
+    position: absolute;
+    width:0px; 
+    height:0px; 
+    border:20px solid; 
+    border-color:#fff transparent transparent transparent;
+  }
 </style>

@@ -1,124 +1,207 @@
 <!--
-* Echarts-Annular
+* Echarts-Annular 圆环图
 * Seong Han
 * 2019.07.22
 -->
 <template>
-  <div>
-    <div ref="annularChartContainer" style="width:100%; height:100%; z-index:1"></div>
-  </div>
+	<div v-if="showState"  style="width:calc(calc(100%)); height:calc(100%);">
+		<div ref="annularChartContainer" style="width:calc(100%); height:calc(100%); z-index:1"></div>
+	</div>
+	<div v-else class="picture"></div>
 </template>
 
 <script>
-import echarts from "echarts";
-export default {
-  props: {
-    annularData: Object,//数据
-    title: String,//标题
-	},
-  data() {
-    return {
-      legendData:[],
-      listData: [],
-      arrayData:[]
-    };
-  },
-  mounted() {
-    this.getData
-    const { title,legendData,arrayData,listData } = this
-    let myChart = echarts.init(this.$refs.annularChartContainer)
-    myChart.setOption({
-			color: ['#08c','#fa5','#c03', '#609','#703','#0fc'],
-      title: {
-        text: title,
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b}: {c} ({d}%)"
-      },
-      legend: {
-				orient: "horizontal",
-				top:"10%",
-        data: legendData
+	import echarts from "echarts";
+	export default {
+		props: {
+			annularData: Object, //数据
+			anName: String,
+			title: String, //标题
+			defaultColor: String,
+		},
+		data() {
+			return {
+				name: [],
+				legendData: [],
+				listData: [],
+				arrayData: [],
+				myChartOption: {},
+				myChart: null,
+				graphicSrt: '',
+				showState:true,
+			};
+		},
+		mounted() {
+			window.onresize = () => {
+				return (() => {
+					this.getNext()
+				})();
+			};
+		},
+		updated: function () {
+			this.$nextTick(function () {
+				this.myChart.resize()
+			})
+  	},
+		methods: {
+			getData() {
+				for (var key in this.annularData) {
+					this.legendData.push(key)
+					this.arrayData.push(this.annularData[key])
+				}
+				//datalist遍历
+				for (var i = 0; i < this.legendData.length; i++) {
+					this.graphicSrt =this.graphicSrt +'\n'+ this.legendData[i] + ':' +this.arrayData[i]
+					this.listData.push({
+						value: this.arrayData[i],
+						name: this.legendData[i],
+						itemStyle: {
+								normal: {
+										color: { // 完成的圆环的颜色
+												colorStops: [{offset: 0,color: this.annularColor[i] // 0% 处的颜色
+												}, {offset: 1,color: this.annularColor[i] // calc(100%) 处的颜色
+												}]
+										},
+										label: {
+												show: false
+										},
+										labelLine: {
+												show: false
+										}
+								}
+						},
+						label: {
+								normal: {
+									position: 'center',
+									show: true,
+									textStyle: {
+										fontSize: '0',
+										color: '#fff',
+									},
+								},
+							},
+					})
+				}
 			},
-      grid : {
-        top : "20%",    //距离容器上边界40像素
-      },
-      series: [
-        {
-          name: "访问来源",
-          type: "pie",
-          radius: ["40%", "60%"],
-          avoidLabelOverlap: false,
-          label: {
-            normal: {
-              show: false,
-              position: "center"
-            },
-            emphasis: {
-              show: true,
-              textStyle: {
-                fontSize: "30",
-                fontWeight: "bold"
-              }
+			getMyChart() {
+				let _that = this
+				this.myChartOption = {
+					title: {
+						text: this.title,
+					},
+          // legend:{
+          //   orient: 'vertical',
+          //   x: 'left',
+          //   data:this.legendData
+          // },
+					grid: {
+						left: 10,
+						top: 50,
+						bottom: 10,
+						right: 10,
+						containLabel: true
+					},
+					tooltip: {
+						trigger: "item",
+						formatter: function(params, tickets, callback) {
+              /* if( _that.paramsName != params.name ){
+                _that.paramsName = params.name
+                _that.$emit('itemClick',params)
+              } */
+              return params.name+" : "+params.value+" ("+params.percent+"%)";
             }
-          },
-          labelLine: {
-            normal: {
-              show: false
-            }
-          },
-          itemStyle: {
-            normal: {
-                label: {
-                    show: false
-                },
-                labelLine: {
-                    show: false
-                }
-            }
-          },
-          hoverAnimation: false, 
-          data: listData,
-        }
-      ]
-    })
-  },
-  methods: {},
-  computed: {
-    getData(){
-      debugger
-      const { annularData,legendData,arrayData,listData } = this
-      for (var key in annularData){
-        legendData.push(key)
-        arrayData.push(annularData[key])
-      }
-      var color= ['#08c','#fa5','#c03', '#609','#703','#0fc']
-      //datalist遍历
-      for(var i=0; i<legendData.length; i++){
-        listData.push({
-          value: arrayData[i], name: legendData[i],
-          itemStyle: {
-                normal: {
-                    color: { // 完成的圆环的颜色
-                        colorStops: [{offset: 0,color: '#fff' // 0% 处的颜色
-                        }, {offset: 1,color: color[i] // 100% 处的颜色
-                        }]
-                    },
-                    label: {
-                        show: false
-                    },
-                    labelLine: {
-                        show: false
-                    }
-                } 
-            }
-        })
-      }
-      return{ legendData,arrayData,listData }
-    }
-  },
-};
+					},
+					calculable: true,
+					series: [{
+						stack: 'a',
+						type: "pie",
+            startAngle:270,
+						radius: ["76%", "54%"],
+						avoidLabelOverlap: true,
+						label: {
+							normal: {
+								show: true,
+								formatter: "{b}:{c}",
+								textStyle: {
+									fontSize: 16,
+									fontWeight: 700,
+								},
+								position: 'outside'
+							},
+							emphasis: {
+								show: true
+							}
+						},
+						labelLine: {
+							normal: {
+								show: true,
+								length: 15,
+								length2: 25
+							},
+							emphasis: {
+								show: false
+							}
+						},
+						hoverAnimation: false,
+						data: this.listData
+					}]
+				}
+			},
+
+			getNext() {
+				let _that = this
+				_that.$nextTick(() => {
+					_that.myChart = echarts.init(_that.$refs.annularChartContainer)
+					_that.myChart.setOption(_that.myChartOption,true)
+					_that.myChart.resize()
+					_that.myChart.on('click', function(params) {
+											_that.$emit('itemClick', params)
+										});
+				})
+			},
+			getRAD() {
+        this.myChart.dispose()
+        this.myChart = echarts.init(this.$refs.annularChartContainer)
+        this.myChart.setOption(this.myChartOption,true)
+				this.myChart.resize()
+				this.myChart.on('click', function(params) {
+					this.$emit('onClick', params.name)
+				});
+    	}
+		},
+		computed: {
+			annularColor() {
+				let color = ['#e60012', '#f39800', '#f3a146', '#ff5f61', '#4f6efa', '#69c0fe', '#199d95','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225']
+				// if ( this.defaultColor != '' ) {
+				// 	color.splice(0,1,this.defaultColor);
+				// }
+				return color
+			}
+		},
+		watch: {
+			annularData: {
+				immediate: true,
+				handler: function(val, oldval) {
+					if (Object.keys(val).length > 0) {
+						this.getData()
+						this.getMyChart()
+						this.getNext()
+						this.showState = true
+					}else{
+						this.showState = false
+					}
+				},
+				deep: true //对象内部的属性监听，也叫深度监听
+			},
+		}
+	};
 </script>
 
-<style></style>
+<style>
+.picture{
+    height: 100%;
+    width: 100%;
+    background: url('./nodata.png') no-repeat center center;
+		background-size: 30%;
+  }
+</style>

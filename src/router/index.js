@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 //import routes from './routes'
-import Index from '@/pages/index.vue'
+import Index from '@/pages/index1.vue'
 //import voTablePush from '@/pages/voTablePush.vue'
 Vue.use(Router)
 const routes =  [

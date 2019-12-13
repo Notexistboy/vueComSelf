@@ -9,43 +9,19 @@
 		<el-input placeholder="输入关键字进行过滤" v-model="filterText">
 		</el-input>
 		<el-tree
+			ref="tree"
       :data="data"
       show-checkbox
       node-key="id"
       default-expand-all
+			:lazy="true"
+			:load="loadNode"
 			@node-click="nodeClick"
 			@node-contextmenu="nodeClickContextmenu"
 			:filter-node-method="filterNode"
       :expand-on-click-node="false"
       :render-content="renderContent">
     </el-tree>
-		<!-- <el-tree
-      :data="data"
-      show-checkbox
-      node-key="id"
-      default-expand-all
-			@node-click="nodeClick"
-			@node-contextmenu="nodeClickContextmenu"
-			:filter-node-method="filterNode"
-      :expand-on-click-node="false">
-      <span class="custom-tree-node" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
-        <span>
-          <el-button
-            type="text"
-            size="mini"
-            @click="append(data)">
-            Append
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="remove(node, data)">
-            Delete
-          </el-button>
-        </span>
-      </span>
-    </el-tree> -->
 		<el-dialog :visible.sync="showInfoDialog" v-if="showInfoDialog" @close="controlDialog" :modal="false" width="60%">
 				<el-form>
 					<el-form-item label="名称:">
@@ -72,6 +48,9 @@
 						label: 'label', // label	指定节点标签为节点对象的某个属性值	string | function(data, node)、
 						// disabled: 'disabled', // disabled	指定节点选择框是否禁用为节点对象的某个属性值	boolean | function(data, node)
 						// isLeaf: 'isLeaf', // isLeaf	指定节点是否为叶子节点，仅在指定了 lazy 属性的情况下生效	boolean | function(data, node)
+						node: null,
+						firstTime: true,
+						resolve: Function,
 					}
 				}
 			}
@@ -92,6 +71,15 @@
 			}
 		},
 		methods: {
+			loadNode(node, resolve) {
+				debugger
+				if(this.firstTime){
+					this.firstTime = false
+					this.node = node
+					this.resolve = resolve
+				}
+				resolve(this.data)
+			},
 			// element提供的节点右键点击事件。共四个参数，依次为：event、传递给 data 属性的数组中该节点所对应的对象、节点对应的 Node、节点组件本身。
 			nodeClickContextmenu(ev, data, node, component) {
 				this.$emit('node-contextmenu', ev, data, node, component)
@@ -111,11 +99,12 @@
 			//模态框显示隐藏
 			controlDialog(data) {
 				debugger
+				this.newItem = ""
 				this.itemData = data
 				this.showInfoDialog = !this.showInfoDialog
 			},
 			//添加的方法
-      append(data) {
+      append(node,data) {
 				debugger
 				this.showInfoDialog = !this.showInfoDialog
         const newChild = { id: data.id++, label: this.newItem, children: [] };
@@ -124,6 +113,7 @@
         }
 				data.children.push(newChild);
 				debugger
+				this.loadNode(this.node, this.resolve)
       },
       remove(node, data) {
 				debugger
@@ -143,7 +133,8 @@
           </span>);
       }
 		},
-		mounted() {}
+		mounted() {},
+
 	};
 </script>
 <style>
