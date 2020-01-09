@@ -8,7 +8,7 @@
     <div id="centerEcharts1" ref="barChartContainer" style="width:calc(100%); height:calc(100%); z-index:1"></div>
     <div id="centerEcharts2" ref="barChartShadow" style="width:calc(100%); height:calc(100%);"></div>
   </div>
-  <div v-else class="picture"></div>
+  <div v-else class="picture" :class="picSize"></div>
 </template>
 
 <script>
@@ -36,9 +36,22 @@ export default {
       myChart: null,
       myShadow: null,
       showState:true,
+      picSize: '',
 		};
   },
+  created() {
+
+  },
   mounted() {
+    if(this.$parent.$el){
+      if(this.$parent.$el.clientHeight < 500){
+        this.picSize = 'smaPic'
+      }else if(this.$parent.$el.clientHeight < 750){
+        this.picSize = 'midPic'
+      }else if(this.$parent.$el.clientHeight < 1000){
+        this.picSize = 'bigPic'
+      }
+    }
     window.onresize = () => {
       return (() => {
         this.getNext()
@@ -47,22 +60,40 @@ export default {
   },
   methods: {
     getData(){
-			let colorA = ['#009bee','#fd8a6c','#c03', '#609','#703','#0fc','#009bee','#fd8a6c','#c03', '#609','#703','#0fc','#009bee','#fd8a6c','#c03', '#609','#703','#0fc']
-      let colorB = ['#00c9f8','#e96341','#c03', '#609','#703','#0fc','#009bee','#fd8a6c','#c03', '#609','#703','#0fc','#009bee','#fd8a6c','#c03', '#609','#703','#0fc']
+			let colorA = ['#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269',]
+      let colorB = ['#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269',]
       const { barData,descript,legend } = this
       this.legendData= []
       this.xAxisDatas = []
       this.yAxisData = []
       this.seriesData = []
       this.seriesDataShadow = []
-			let values= []
+      let values= []
+      let barWidth = '10%'
+      let rotate = '0'
       for(let key in this.barData){
         this.legendData.push(key);
         values.push(this.barData[key])//取得value
         for(let item in this.barData[key]){
           this.xAxisDatas.push(item)
+          this.xAxisDatas = [...new Set(this.xAxisDatas)]
         }
       }
+      if(this.xAxisDatas.length > 10){
+        rotate = '45'
+      }else{
+        rotate = '0'
+      }
+      if(this.legendData.length < 5){
+        barWidth = '12%'
+      }else if(this.legendData.length < 10){
+        barWidth = '8%'
+      }else if(this.legendData.length < 15){
+        barWidth = '6%'
+      }else if(this.legendData.length < 20){
+        barWidth = '4%'
+      }
+
       //遍历y轴,legendData对应y轴名称
 			//遍历value中的数据
       let obj={}
@@ -73,6 +104,7 @@ export default {
       let yMax
       let yMin
       let itemLength
+
       values.map((item,index) => {
         obj["data_"+index]=[]
         for(let it in values[index]){
@@ -83,8 +115,8 @@ export default {
         //Ymax 值可能不同 单位不同 无法公用一个
         yMaxArr.push(Math.max.apply(null, obj["data_"+index]))
         yMinArr.push(Math.min.apply(null, obj["data_"+index]))
-        yMax = Math.max.apply(null, yMaxArr)
-        yMin = Math.min.apply(null, yMaxArr)
+        yMax = parseFloat(Math.max.apply(null, yMaxArr))
+        yMin = parseFloat(Math.min.apply(null, yMinArr))
         itemLength = obj["data_"+index].length
         if(!descript){
           if(index==2){
@@ -92,12 +124,23 @@ export default {
           }else if(index>2){
             offset = 25+(index*25);
           }
-          let ymax = Math.ceil(Math.max.apply(null, obj["data_"+index])/10)*10
+          let ymax = 0
+          let maxInterval = 0
+          if(Math.max.apply(null, obj["data_"+index]) >= 10){
+            ymax = Math.ceil(Math.max.apply(null, obj["data_"+index])/10)*10
+            maxInterval = Math.ceil(ymax/ 5)
+          }else if(Math.max.apply(null, obj["data_"+index]) <= 1){
+            ymax = 1
+            maxInterval = 0.2
+          }else{
+            ymax = Math.ceil(Math.max.apply(null, obj["data_"+index])/5)*5
+            maxInterval = Math.ceil(ymax/ 5)
+          }
           this.yAxisData.push({
             type: 'value',
             name: this.legendData[index],
             max: ymax,
-            interval: Math.ceil(ymax/ 5),//刻度均匀分
+            interval: maxInterval,//刻度均匀分
             axisLabel: {
               formatter: '{value}'
             },
@@ -112,7 +155,7 @@ export default {
         this.seriesData.push({
           name: this.legendData[index],
           type: "bar",
-          barWidth: "20%",
+          barWidth,
           data: obj["data_"+index],
           itemStyle: {
             normal: {
@@ -135,13 +178,23 @@ export default {
       //Y轴遍历 是同类，只有1个y轴
       if(descript){
         //let ymax = Math.ceil(Math.max.apply(null, obj["data_"+index])/10)*10
-        let ymax = Math.ceil(yMax/10)*10
-        
+        let ymax = 0
+        let maxInterval = 0
+        if(yMax >= 10){
+          ymax = Math.ceil(yMax/10)*10
+          maxInterval = Math.ceil(ymax/ 5)
+        }else if(yMax < 1){
+          ymax = 1
+          maxInterval = 0.2
+        }else{
+          ymax = Math.ceil(yMax/5)*5
+          maxInterval = Math.ceil(ymax/ 5)
+        }
         this.yAxisData.push({
           type: 'value',
           name: legend,
           max: ymax,
-          interval: Math.ceil(ymax/ 5),//刻度均匀分
+          interval: maxInterval,//刻度均匀分
           axisLabel: {
             formatter: '{value}'
           },
@@ -157,6 +210,7 @@ export default {
           data: [ ...new Set( this.xAxisDatas ) ],
           axisTick: { show: false },
           axisLabel: {
+            rotate,
             show: true,
             textStyle: {
               fontSize: '12',//设置横坐标轴文字颜大小
@@ -164,11 +218,27 @@ export default {
           }
         }
       ]
+      this.xAxis.forEach((item, index)=> {
+        Object.assign(item.axisLabel, {
+          formatter: function(value){
+            if(value.length>6){
+              value = value.substr(0,5)+".."
+            }
+            return value
+          },
+        })
+      })
       //阴影部分
       for(let index=0; index<values.length; index++){
         const itemLength = obj["data_"+index].length
         let yMaxData = Math.max.apply(null, obj["data_"+index])
-        yMaxData = Math.ceil(yMaxData/10)*10
+        if(yMaxData >= 10){
+          yMaxData = Math.ceil(yMaxData/10)*10
+        }else if(yMaxData <= 1){
+          yMaxData = 1
+        }else{
+          yMaxData = Math.ceil(yMaxData/5)*5
+        }
         if(dataShadow.length < itemLength){
           //i不能混用 下面还要用i
           for (let j = 0; j < itemLength; j++) {
@@ -182,7 +252,7 @@ export default {
             normal: { color: "rgba(0,0,0,0.05)" }
           },
           name: this.legendData[index],
-          barWidth: "20%",
+          barWidth,
           barCategoryGap: "-150%",
           data: dataShadow, //会显示出来
           animation: false,
@@ -205,11 +275,15 @@ export default {
           }
         },
         legend: {
+          type:'scroll',
           orient: "horizontal",
           top:"5%",
           data: this.legendData
         },
-        grid :this.grid,
+        grid : {
+          top : "20%" ,  //距离容器上边界40像素
+          bottom:"25%"
+        },
         lable: true,
         xAxis: this.xAxis,
         yAxis: yAxisData,
@@ -225,7 +299,10 @@ export default {
           text: ""
         },
         legend: this.legend,
-        grid : this.grid,
+        grid : {
+          top : "20%" ,  //距离容器上边界40像素
+          bottom:"25%"
+        },
         xAxis: {
           type: "category",
           data: null,
@@ -312,10 +389,4 @@ export default {
      height: 100%;
      box-sizing:border-box;
    }
-  .picture{
-    height: 100%;
-    width: 100%;
-    background: url('./nodata.png') no-repeat center center;
-    background-size: 30%;
-  }
 </style>

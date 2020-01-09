@@ -7,7 +7,7 @@
 	<div v-if="showState"  style="width:calc(calc(100%)); height:calc(100%);">
 		<div ref="annularChartContainer" style="width:calc(100%); height:calc(100%); z-index:1"></div>
 	</div>
-	<div v-else class="picture"></div>
+	<div v-else class="picture" :class="picSize"></div>
 </template>
 
 <script>
@@ -29,9 +29,24 @@
 				myChart: null,
 				graphicSrt: '',
 				showState:true,
+				resizeTimer: null,
+				picSize: '',
 			};
 		},
+		created() {
+
+		},
 		mounted() {
+			
+			if(this.$parent.$el){
+				if(this.$parent.$el.clientHeight < 500){
+					this.picSize = 'smaPic'
+				}else if(this.$parent.$el.clientHeight < 750){
+					this.picSize = 'midPic'
+				}else if(this.$parent.$el.clientHeight < 1000){
+					this.picSize = 'bigPic'
+				}
+			}
 			window.onresize = () => {
 				return (() => {
 					this.getNext()
@@ -154,6 +169,15 @@
 					_that.myChart = echarts.init(_that.$refs.annularChartContainer)
 					_that.myChart.setOption(_that.myChartOption,true)
 					_that.myChart.resize()
+          // window.onresize = _that.myChart.resize;
+
+          window.addEventListener('resize', function () {
+            if (_that.resizeTimer) clearTimeout(_that.resizeTimer);
+            _that.resizeTimer = setTimeout(function () {
+              _that.myChart.resize();
+            }, 100)
+          })
+
 					_that.myChart.on('click', function(params) {
 											_that.$emit('itemClick', params)
 										});
@@ -164,6 +188,7 @@
         this.myChart = echarts.init(this.$refs.annularChartContainer)
         this.myChart.setOption(this.myChartOption,true)
 				this.myChart.resize()
+        window.onresize = this.myChart.resize;
 				this.myChart.on('click', function(params) {
 					this.$emit('onClick', params.name)
 				});
@@ -171,10 +196,10 @@
 		},
 		computed: {
 			annularColor() {
-				let color = ['#e60012', '#f39800', '#f3a146', '#ff5f61', '#4f6efa', '#69c0fe', '#199d95','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225']
-				// if ( this.defaultColor != '' ) {
-				// 	color.splice(0,1,this.defaultColor);
-				// }
+				let color = ['#009bee','#f39800','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269',]
+				 if ( this.defaultColor != '' ) {
+				 	color.splice(0,1,this.defaultColor);
+				 }
 				return color
 			}
 		},
@@ -197,11 +222,3 @@
 	};
 </script>
 
-<style>
-.picture{
-    height: 100%;
-    width: 100%;
-    background: url('./nodata.png') no-repeat center center;
-		background-size: 30%;
-  }
-</style>

@@ -7,7 +7,7 @@
   <div v-if="showState" style="width:calc(100%); height:calc(100%); z-index:1">
     <div id="pieChartContainer" ref="pieChartContainer" style="width:calc(100%); height:calc(100%); z-index:1"></div>
   </div>
-  <div v-else class="picture"></div>
+  <div v-else class="picture" :class="picSize"></div>
 </template>
 
 <script>
@@ -16,6 +16,10 @@
     props: {
       pieData: Object,//数据
       title: String,//标题
+      orient: {
+        type: String,
+        default: 'horizontal'    
+      }
     },
     data() {
       return {
@@ -27,9 +31,22 @@
         myChart: null,
         paramsName: '',
         showState:true,
+        picSize: '',
       };
     },
+		created() {
+
+		},
     mounted() {
+			if(this.$parent.$el){
+				if(this.$parent.$el.clientHeight < 500){
+					this.picSize = 'smaPic'
+				}else if(this.$parent.$el.clientHeight < 750){
+					this.picSize = 'midPic'
+				}else if(this.$parent.$el.clientHeight < 1000){
+					this.picSize = 'bigPic'
+				}
+			}
       window.onresize = () => {
 				return (() => {
 					this.getNext()
@@ -47,10 +64,10 @@
           _that.legendData.push(key)
           _that.arrayData.push(_that.pieData[key])
         }
-        var colorA= ['#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225']
-        var colorB= ['#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225','#0059a9','#95de64','#7030a0', '#ffc000','#703','#0fc','#f8b551','#ec6941','#cdad75','#80c269','#595959','#76b1f9','#4c93ff','#f00','#7030a0','#fed225']
+        var colorA= ['#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269',]
+        var colorB= ['#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269','#009bee','#fd8a6c','#c03', '#0fc','#f8b551','#ec6941','#76b1f9','#80c269',]
         //datalist遍历
-        
+
         for(var i=0; i<_that.legendData.length; i++){
           _that.listData.push({
             value: _that.arrayData[i], name: _that.legendData[i],
@@ -69,13 +86,14 @@
                 }
               }
             }
-            
+
           })
         }
       },
       getMyChart() {
         let _that = this
         this.myChartOption = {}
+
         this.myChartOption = {
           title: {
             text: this.title,
@@ -92,8 +110,9 @@
           },
           legend: {
           	type: 'scroll',
-            orient: "horizontal",
+            orient: this.orient,
             top:"10%",
+            right:"10%",
             data: this.legendData
           },
           grid: {
@@ -103,8 +122,8 @@
             {
               name: "访问来源",
               type: "pie",
-              radius: "40%",
-              center: ["50%", "50%"],
+              radius: "60%",
+              center: ["50%", "50%"],//位置
               itemStyle: {
               normal: {
                   label: {
@@ -121,7 +140,7 @@
             }
           ]
         }
-        
+
       },
       getNext() {
         let _that = this
@@ -152,7 +171,7 @@
 				immediate: true,
 				handler: function(val, oldval) {
 					if (Object.keys(val).length > 0) {
-            
+
 						this.getData()
 						this.getMyChart()
             this.getNext()
@@ -166,12 +185,3 @@
 		}
   };
 </script>
-
-<style>
-.picture{
-  height: 100%;
-  width: 100%;
-  background: url('./nodata.png') no-repeat center center;
-  background-size: 30%;
-}
-</style>

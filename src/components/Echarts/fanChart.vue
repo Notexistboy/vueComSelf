@@ -7,7 +7,7 @@
 	<div v-if="showState" style="width:calc(100%); height:calc(100%);">
 		<div ref="fanChartContainer" style="width:calc(100%); height:calc(100%); z-index:1"></div>
 	</div>
-	<div v-else class="picture"></div>
+	<div v-else class="picture" :class="picSize"></div>
 </template>
 
 <script>
@@ -25,9 +25,20 @@
 				myChartOption: {},
 				myChart: null,
 				showState:true,
+				picSize: '',
 			};
 		},
+		created() {
+
+		},
 		mounted() {
+			if(this.$parent.$el.clientHeight < 500){
+				this.picSize = 'smaPic'
+			}else if(this.$parent.$el.clientHeight < 750){
+				this.picSize = 'midPic'
+			}else if(this.$parent.$el.clientHeight < 1000){
+				this.picSize = 'bigPic'
+			}
 			window.onresize = () => {
 				return (() => {
 					this.getNext()
@@ -179,11 +190,3 @@
 	}
 </script>
 
-<style>
-  .picture{
-    height: 100%;
-    width: 100%;
-    background: url('./nodata.png') no-repeat center center;
-		background-size: 30%;
-  }
-</style>
